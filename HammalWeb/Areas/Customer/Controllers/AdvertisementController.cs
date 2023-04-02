@@ -60,26 +60,28 @@ namespace HammalWeb.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            
-            
-            
-            
-            if (ModelState.IsValid)
-            {
-                if (obj.Advertisement.Id==0 || obj.Advertisement==null)
-                {
-                    obj.Advertisement.AdvertiserID = claim.Value;
-                    _unitOfWork.Advertisement.Add(obj.Advertisement); //Veri tabanına kayıt
-                    TempData["success"] = "İlan Eklendi";
 
-                }
-                else
-                {
-                    _unitOfWork.Advertisement.Update(obj.Advertisement);
-                    TempData["success"] = "İlan Güncellendi";
 
-                }
-                _unitOfWork.Save();
+			if (User.Identity.IsAuthenticated)
+			{
+                obj.Advertisement.AdvertiserID = claim.Value;
+				 if (ModelState.IsValid)
+                 {
+                     if (obj.Advertisement.Id==0 || obj.Advertisement==null)
+                     {
+                         obj.Advertisement.AdvertiserID = claim.Value;
+                         _unitOfWork.Advertisement.Add(obj.Advertisement); //Veri tabanına kayıt
+                         TempData["success"] = "İlan Eklendi";
+                        return RedirectToAction("Index");
+                     }
+                     else
+                     {
+                         _unitOfWork.Advertisement.Update(obj.Advertisement);
+                         TempData["success"] = "İlan Güncellendi";
+                          
+                     }
+                     _unitOfWork.Save();
+                 }
             }
             return View(obj);
         }
@@ -90,7 +92,7 @@ namespace HammalWeb.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var advertisementList = _unitOfWork.Advertisement.GetAll();
+            var advertisementList = _unitOfWork.Advertisement.GetAll(includeProperties:"Category");
             return Json(new { data = advertisementList });
 
         }

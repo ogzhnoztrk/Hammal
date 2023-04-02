@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HammalWeb</title>
+    <title>Hammal</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/bootswatch.css" asp-append-version="true" />
@@ -30,17 +30,18 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">İçerik Yönetimi</a>
                             <div class="dropdown-menu">                           
-                                <a class="dropdown-item " asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
-                               
+                                <a class="dropdown-item " asp-area="Admin" asp-controller="Category" asp-action="Index">Kategoriler</a>
+                                <a class="dropdown-item" asp-area="Customer" asp-controller="Advertisement" asp-action="Index">İlanlar</a>
+
                                 <div class="dropdown-divider"></div>
 
                             </div>
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="Customer" asp-controller="Advertisement" asp-action="Index">Advertisemnt</a>
+
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />

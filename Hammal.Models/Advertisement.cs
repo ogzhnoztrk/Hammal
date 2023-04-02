@@ -17,7 +17,7 @@ namespace Hammal.Models
         [Required]
         [DisplayName("Category")]
         public int CategoryId { get; set; }
-        [Required]
+        [ValidateNever]
         public string AdvertiserID { get; set; }
         [ForeignKey("CategoryId")]
         [ValidateNever]

@@ -1,8 +1,74 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<Advertisement>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<head>
+	
+	<style>
+		.advertisements ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		.advertisements li {
+			margin: 10px 0;
+			padding: 10px;
+			border: 1px solid #ddd;
+			background-color: #f5f5f5;
+			list-style:none;
+		}
+
+		.advertisements li:hover {
+			background-color: #ddd;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row no-gutters">
+			<div class="col-md-3">
+				
+				<div>
+					<div class="card card-body">
+						<h5>Filtreleme Seçenekleri</h5>
+						<form>
+							<div class="mb-3">
+								<label for="input-search" class="form-label">Arama</label>
+								<input type="text" class="form-control" id="input-search">
+							</div>
+							<div class="mb-3">
+								<label for="select-category" class="form-label">Kategori</label>
+								<select class="form-select" id="select-category">
+									<option value="">Hepsi</option>
+									<option value="1">Kategori 1</option>
+									<option value="2">Kategori 2</option>
+									<option value="3">Kategori 3</option>
+								</select>
+							</div>
+							<div class="mb-3">
+								<label for="select-sort" class="form-label">Sırala</label>
+								<select class="form-select" id="select-sort">
+									<option value="1">En Yeni</option>
+									<option value="2">En Popüler</option>
+								</select>
+							</div>
+							<button type="submit" class="btn btn-primary">Filtrele</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<ul class="advertisements">
+					@foreach (var item in Model)
+					{
+						<li><strong>@item.Title</strong>  @item.Description</li>
+					}
+			
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	
+</body>
+</html>
