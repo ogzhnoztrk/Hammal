@@ -1,0 +1,48 @@
+﻿@using Hammal.Models;
+@using Hammal.Models.ViewModels;
+@model AdvertisementVM
+
+<form method="post">
+
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">@(Model.Advertisement.Id == 0 ? "Create" : "Update") Advertisement</h2>
+            <hr />
+        </div>
+        @*<div asp-validation-summary="All"></div>*@
+        <div class="mb-3">
+            <label asp-for="Advertisement.Title"></label>
+            <input asp-for="Advertisement.Title" class="form-control" placeholder="Title" />
+            <span asp-validation-for="Advertisement.Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Advertisement.Description"></label>
+            <input asp-for="Advertisement.Description" class="form-control" placeholder="Description" />
+            <span asp-validation-for="Advertisement.Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Advertisement.LastDate"></label>
+            <input asp-for="Advertisement.LastDate" min="@DateTime.Now.ToString("yyyy-MM-ddThh")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-ddThh")" value="@DateTime.Now" class="form-control" />
+            <span asp-validation-for="Advertisement.LastDate" class="text-danger"></span>
+        </div>
+
+        @*DROPDOWNS*@
+        <div class="mb-3 col-6">
+            <label asp-for="Advertisement.CategoryId"></label>
+            <select asp-for="Advertisement.CategoryId" asp-items="@Model.CategoryList" class="form-select">
+                <option disabled selected>--Select Category--</option>
+            </select>
+            <span asp-validation-for="Advertisement.CategoryId" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:150px">@(Model.Advertisement.Id == 0 ? "Create" : "Update")</button>
+        <a asp-controller="Category" asp-action="Index" class="btn btn-secondary" style="width:150px">Back To List</a>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
