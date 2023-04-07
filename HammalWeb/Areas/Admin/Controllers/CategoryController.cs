@@ -1,5 +1,6 @@
 ﻿using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 
@@ -9,13 +10,14 @@ namespace HammalWeb.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CategoryController(IUnitOfWork unitOfWork)
+        private readonly IEmailSender _emailSender;
+        public CategoryController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
+            _emailSender = emailSender;
         }
         public IActionResult Index()
         {
-           
             return View();
         }
 
