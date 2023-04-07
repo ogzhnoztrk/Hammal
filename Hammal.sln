@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HammalWeb", "HammalWeb\HammalWeb.csproj", "{B7C92362-2FD5-44C9-853E-A231D7F07A61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HammalWeb", "HammalWeb\HammalWeb.csproj", "{B7C92362-2FD5-44C9-853E-A231D7F07A61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hammal.Models", "Hammal.Models\Hammal.Models.csproj", "{BB68D8D1-AAE2-4009-B04E-E8516524D893}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hammal.Models", "Hammal.Models\Hammal.Models.csproj", "{BB68D8D1-AAE2-4009-B04E-E8516524D893}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hammal.DataAccess", "Hammal.DataAccess\Hammal.DataAccess.csproj", "{973502B6-0136-44EB-B69A-30171F430E37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hammal.DataAccess", "Hammal.DataAccess\Hammal.DataAccess.csproj", "{973502B6-0136-44EB-B69A-30171F430E37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hammal.Utilities", "Hammal.Utilities\Hammal.Utilities.csproj", "{F2CCB7BB-0A55-4F9A-8390-36D3A0273254}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hammal.Utilities", "Hammal.Utilities\Hammal.Utilities.csproj", "{F2CCB7BB-0A55-4F9A-8390-36D3A0273254}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
