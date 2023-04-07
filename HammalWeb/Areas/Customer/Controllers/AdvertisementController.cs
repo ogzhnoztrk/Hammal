@@ -64,7 +64,6 @@ namespace HammalWeb.Areas.Customer.Controllers
 
 			if (User.Identity.IsAuthenticated)
 			{
-                obj.Advertisement.AdvertiserID = claim.Value;
 				 if (ModelState.IsValid)
                  {
                      if (obj.Advertisement.Id==0 || obj.Advertisement==null)
