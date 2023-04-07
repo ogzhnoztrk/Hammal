@@ -1,5 +1,5 @@
 ﻿using Hammal.DataAccess.Repository.IRepository;
-using HammalWeb.Models;
+using Hammal.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
