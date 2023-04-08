@@ -8,9 +8,10 @@ namespace Hammal.Utilities
 	public class EmailSender : IEmailSender
 	{
 		public string SendGridSecret { get; set; }
-		public EmailSender(IConfiguration _config)
+		private readonly IConfiguration _configuration;
+		public EmailSender(IConfiguration configuration)
 		{
-			SendGridSecret = _config.GetValue<string>("SendGrid:SecretKey");
+			_configuration = configuration;
 		}
 
 
@@ -23,8 +24,8 @@ namespace Hammal.Utilities
 
 			//string smtpServer = "smtp.office365.com"; //SMTP sunucusu adresi
 			//int port = 587; //SMTP sunucusu port numarası
-			//string senderEmail = "hammalexample@hotmail.com"; //Gönderen e-posta adresi
-			//string password = "O.o123456"; //Gönderen e-posta hesabının şifresi
+			//string senderEmail = _configuration["SecretEmailSend:Email"]; //Gönderen e-posta adresi
+			//string password = _configuration["SecretEmailSend:Password"]; //Gönderen e-posta hesabının şifresi
 			//string recipientEmail = email; //Alıcı e-posta adresi
 
 			//MailMessage mail = new MailMessage();
