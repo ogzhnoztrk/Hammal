@@ -12,16 +12,21 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+
+
+
 </head>
 <body>
   <header class="p-3 bg-dark text-white">
     <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start text-md-start">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap" /></svg>
+          <img class="bi me-2" width="105" src="~/images/logo2.jpg" height="80" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap" />
+          <h3 class="display-6 fw-bold lh-1">Hammal</h3>
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="#" class="nav-link px-2 text-secondary"></a></li>
           <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
           <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
           <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
@@ -40,13 +45,17 @@
       </div>
     </div>
   </header>
-  <div class="" style="margin-bottom:50px">
-    <main role="main" class="pb-3">
+ 
+    <main role="main" class="mb-2">
+    <div class="row">
+      <div class="col-md-12">
+        
       <partial name="_Notification" />
-
       @RenderBody()
+      </div>
+      </div>
     </main>
-  </div>
+ 
 
   <footer class="border-top footer text-muted">
     <div class="container">
