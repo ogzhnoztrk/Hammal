@@ -7,12 +7,17 @@ using Microsoft.AspNetCore.Identity;
 using Hammal.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Hammal.Utilities;
+using AutoMapper;
+
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(
     connectionString: builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
         // services.AddDefaultIdentity<IdentityUser>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -21,7 +26,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
+var mapperConfig = new MapperConfiguration(mc =>
+{
+  mc.AddProfile(new MappingProfile());
+});
 
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+builder.Services.AddMvc();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
