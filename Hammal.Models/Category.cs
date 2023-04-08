@@ -15,6 +15,7 @@ namespace Hammal.Models
         [Required]
         [StringLength(70)]
         public string? Name { get; set; }
-
-    }
+        public string? ImgPath { get; set; }
+         public string? Aciklama { get; set; }
+  }
 }

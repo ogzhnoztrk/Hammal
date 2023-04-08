@@ -1,5 +1,7 @@
-﻿using Hammal.DataAccess.Repository.IRepository;
+﻿using AutoMapper;
+using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
+using Hammal.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -10,16 +12,20 @@ namespace HammalWeb.Areas.Customer.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+
+    public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
-        }
+            _mapper = mapper;
+    }
 
         public IActionResult Index()
         {
             var advertisements = _unitOfWork.Advertisement.GetAll();
-            return View(advertisements);
+            var categories= _unitOfWork.Category.GetAll().ToList();
+            return View("Index",categories);
         }
 
         public IActionResult Privacy()
