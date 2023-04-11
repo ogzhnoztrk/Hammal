@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Hammal.Models
 {
-    public class Category
+    public class AltCategory
     {
 
         [Key]
@@ -17,6 +18,12 @@ namespace Hammal.Models
         public string? Name { get; set; }
         public string? ImgPath { get; set; }
          public string? Aciklama { get; set; }
-        public ICollection<AltCategory> AltCategories { get; set; }
+        // Foreign key property
+        public int CategoryId { get; set; }
+
+        // Navigation property
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
+
   }
 }

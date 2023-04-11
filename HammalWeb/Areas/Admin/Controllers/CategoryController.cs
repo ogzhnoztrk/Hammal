@@ -41,8 +41,28 @@ namespace HammalWeb.Areas.Admin.Controllers
 
         }
 
-        //POST
-        [HttpPost]
+        //GET
+        public IActionResult CategoryDetail(int? id)
+        {
+
+
+          if (id == 0 || id == null)
+          {
+            return View("CategoryDetail");
+
+          }
+          else
+          {
+            var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+
+            return View(categoryFromDb);
+          }
+
+
+        }
+
+    //POST
+    [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Category category)
         {
