@@ -11,13 +11,13 @@ namespace Hammal.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Aciklama",
+                name: "CategoryAciklama",
                 table: "Categories",
                 type: "nvarchar(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "ImgPath",
+                name: "CategoryImgPath",
                 table: "Categories",
                 type: "nvarchar(max)",
                 nullable: true);
@@ -27,11 +27,11 @@ namespace Hammal.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Aciklama",
+                name: "CategoryAciklama",
                 table: "Categories");
 
             migrationBuilder.DropColumn(
-                name: "ImgPath",
+                name: "CategoryImgPath",
                 table: "Categories");
         }
     }
