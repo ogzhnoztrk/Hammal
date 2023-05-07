@@ -17,12 +17,14 @@ namespace Hammal.DataAccess.Repository
             Category = new CategoryRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
             Advertisement = new AdvertisementRepository(_db);
+            AltCategory = new AltCategoryRepository(_db);
         }
 
         public ICategoryRepository Category { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
         public IAdvertisementRepository Advertisement { get; private set; }
-
+        public IAltCategoryRepository AltCategory { get; private set; }
+    
         public void Save()
         {
             _db.SaveChanges();

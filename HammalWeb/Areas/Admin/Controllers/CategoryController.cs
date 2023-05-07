@@ -7,11 +7,11 @@ using Microsoft.Extensions.Hosting;
 namespace HammalWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryController : Controller
+    public class ServiceController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailSender;
-        public CategoryController(IUnitOfWork unitOfWork, IEmailSender emailSender)
+        public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
@@ -53,9 +53,10 @@ namespace HammalWeb.Areas.Admin.Controllers
           }
           else
           {
-            var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+            var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CATEGORY_ID == id).ToList();
 
-            return View(categoryFromDb);
+
+            return View("CategoryDetail", altCategoryFromDb);
           }
 
 
