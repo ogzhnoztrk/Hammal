@@ -129,7 +129,6 @@ namespace HammalWeb.Areas.Identity.Pages.Account
             {
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Indi)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-             
             }
             Input = new InputModel()
             {
@@ -173,7 +172,6 @@ namespace HammalWeb.Areas.Identity.Pages.Account
                     {
                         await _userManager.AddToRoleAsync(user, SD.Role_User_Indi);
                     }
-                   
                     else
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);

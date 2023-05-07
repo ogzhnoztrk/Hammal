@@ -22,7 +22,7 @@ namespace Hammal.Models
         public int CategoryId { get; set; }
 
         // Navigation property
-        [ForeignKey("CATEGORY_ID")]
+        [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
   }

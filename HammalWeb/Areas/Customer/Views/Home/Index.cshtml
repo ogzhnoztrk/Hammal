@@ -1,24 +1,5 @@
 ﻿@model List<Category>
 
- 
-<script type="text/javascript">
-  $(document).ready(function () {
-    $.ajax({
-      url: "@Url.Action("GetAll", "Category",new { area = "Admin" })",
-      type: "GET",
-      success: function (result) {
-        $(result).each(function () {
-          $("#FromJson").append($("<option></option>").val(this.ID).html(this.Name));
-        });
-      },
-      error: function (data) { }
-    });
-  });
-</script>
-
-
-  </script>
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -103,14 +84,6 @@
                 }
             </div>
         </form>
-
-        <tr>
-          <td> Populating With Json Data </td>
-          <td>
-            @Html.DropDownList("FromJson", new SelectList(Enumerable.Empty
-            <SelectListItem>()))
-          </td>
-        </tr>
     </div>
   </div>
 
