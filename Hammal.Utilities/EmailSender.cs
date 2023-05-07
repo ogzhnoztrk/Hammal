@@ -40,8 +40,8 @@ namespace Hammal.Utilities
 			smtpClient.UseDefaultCredentials = false;
 			smtpClient.Credentials = new NetworkCredential(senderEmail, password);
 			smtpClient.EnableSsl = true;
-
-			smtpClient.Send(mail);
+			//Hata varsa buraya bak
+			//smtpClient.Send(mail);
 			Console.WriteLine("E-posta gönderildi.");
 
 
