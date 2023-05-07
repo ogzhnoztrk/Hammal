@@ -15,8 +15,8 @@ namespace Hammal.Models
         [Required]
         [StringLength(70)]
         public string? Name { get; set; }
-        public string? ImgPath { get; set; }
-         public string? Aciklama { get; set; }
+        public string? CategoryImgPath { get; set; }
+        public string? CategoryAciklama { get; set; }
         public ICollection<AltCategory> AltCategories { get; set; }
   }
 }

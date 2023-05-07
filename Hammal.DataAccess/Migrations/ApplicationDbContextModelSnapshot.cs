@@ -55,7 +55,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Advertisements");
+                    b.ToTable("Advertisements", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.AltCategory", b =>
@@ -84,7 +84,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("AltCategories");
+                    b.ToTable("AltCategories", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.Category", b =>
@@ -108,7 +108,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

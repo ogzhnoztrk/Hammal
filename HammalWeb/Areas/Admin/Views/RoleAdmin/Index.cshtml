@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model List<IdentityRole>
+
+<h1>Yeni Rol Ekle</h1>
+
+<form asp-action="Create">
+  <div class="form-group">
+    <label for="roleName">Rol Adı:</label>
+    <input type="text" class="form-control" id="roleName" name="roleName" value="@Model" />
+
+  </div>
+  <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
