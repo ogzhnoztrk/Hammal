@@ -7,11 +7,12 @@ using Microsoft.Extensions.Hosting;
 namespace HammalWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CategoryController : Controller
+
+    public class ServiceController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailSender;
-        public CategoryController(IUnitOfWork unitOfWork, IEmailSender emailSender)
+        public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
@@ -33,7 +34,7 @@ namespace HammalWeb.Areas.Admin.Controllers
             }
             else
             {
-               var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.ID == id);
+               var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
 
                 return View(categoryFromDb);
             }
@@ -53,7 +54,7 @@ namespace HammalWeb.Areas.Admin.Controllers
           }
           else
           {
-            var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CATEGORY_ID == id).ToList();
+            var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
 
 
             return View("CategoryDetail", altCategoryFromDb);
@@ -67,10 +68,10 @@ namespace HammalWeb.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Category category)
         {
-            var categoriesFromDb = _unitOfWork.Category.GetFirstOrDefault(filter => filter.NAME == category.NAME);
+            var categoriesFromDb = _unitOfWork.Category.GetFirstOrDefault(filter => filter.Name == category.Name);
             if (ModelState.IsValid)
             {
-                if (category.ID == 0)
+                if (category.Id == 0)
                 {
                     if (categoriesFromDb == null)
                     {
@@ -120,7 +121,7 @@ namespace HammalWeb.Areas.Admin.Controllers
 
         public IActionResult Delete(int? id)
         {
-            var obj = _unitOfWork.Category.GetFirstOrDefault(c => c.ID == id);
+            var obj = _unitOfWork.Category.GetFirstOrDefault(c => c.Id == id);
 
             if (obj == null)
             {

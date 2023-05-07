@@ -11,6 +11,7 @@ namespace Hammal.DataAccess.Repository.IRepository
         ICategoryRepository Category { get; }
         IAdvertisementRepository Advertisement { get; }
         IApplicationUserRepository ApplicationUser { get; }
+        IAltCategoryRepository AltCategory { get; }
         void Save();
     }
 }

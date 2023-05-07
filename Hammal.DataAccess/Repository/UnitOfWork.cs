@@ -1,5 +1,6 @@
 ﻿using Hammal.DataAccess.Data;
 using Hammal.DataAccess.Repository.IRepository;
+using Hammal.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,13 @@ namespace Hammal.DataAccess.Repository
             Category = new CategoryRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
             Advertisement = new AdvertisementRepository(_db);
+            AltCategory = new AltCategoryRepository(_db);
         }
 
         public ICategoryRepository Category { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
         public IAdvertisementRepository Advertisement { get; private set; }
+        public IAltCategoryRepository AltCategory { get; private set; }
 
         public void Save()
         {

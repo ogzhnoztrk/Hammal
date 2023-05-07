@@ -42,21 +42,22 @@ namespace HammalWeb.Areas.Admin.Controllers
         }
 
         //GET
-        public IActionResult CategoryDetail(int? id)
+        public IActionResult CategoryDetail(int? Id)
         {
 
 
-          if (id == 0 || id == null)
+          if (Id == 0 || Id == null)
           {
             return View("CategoryDetail");
 
           }
           else
           {
-            var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+        var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == Id).ToList();
 
-            return View(categoryFromDb);
-          }
+
+        return View("CategoryDetail", altCategoryFromDb);
+      }
 
 
         }

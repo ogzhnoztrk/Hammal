@@ -51,6 +51,7 @@
   <div class="album py-5 bg-light">
     <div class="container">
       <form>
+  
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
                 @for (int i = 0; i < Model.Count; i++)
                 {
@@ -64,7 +65,7 @@
                           <p class="card-text ">@Model[i].CategoryAciklama</p>
                           <div class="col-md-6 d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                          <a type="button" asp-controller="Category" asp-action="CategoryDetail" data="@Model[i].Id" asp-area="Admin" class="btn btn-sm btn-warning ">Teklif Al</a>
+                          <a type="button" asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="btn btn-sm btn-warning ">Teklif Al</a>
                         
                             </div>
                           </div>
