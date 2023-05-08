@@ -12,6 +12,9 @@ namespace Hammal.DataAccess.Repository.IRepository
         IAdvertisementRepository Advertisement { get; }
         IApplicationUserRepository ApplicationUser { get; }
         IAltCategoryRepository AltCategory { get; }
+        ICityRepository City { get; }
+        IDistrictRepository District { get; }
+        IAddressRepository Address { get; }
         void Save();
     }
 }
