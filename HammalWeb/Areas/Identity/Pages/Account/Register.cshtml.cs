@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
+using Hammal.Models.ViewModels;
 using Hammal.Utilities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -115,9 +116,10 @@ namespace HammalWeb.Areas.Identity.Pages.Account
             public string? Name { get; set; }
             public string? City { get; set; }
             public string? Street { get; set; }
-            public string? State { get; set; }
+            public string? District { get; set; }
             public string? PhoneNumber { get; set; }
             public string? Role { get; set; }
+            public AddressVM AddressVM { get; set; }
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
         }
@@ -138,11 +140,29 @@ namespace HammalWeb.Areas.Identity.Pages.Account
                     Text = i,
                     Value = i
                 }),
+
+                AddressVM = new()
+                {
+                    CityList = _unitOfWork.City.GetAll().Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Id.ToString()
+                        
+                    }),
+                    //DistrictList = _unitOfWork.District.GetAll().Select(i => new SelectListItem
+                    //{
+                    //    Text = i.Name,
+                    //    Value = i.Id.ToString()
+                    //}),
+                }
+
             };
+
+           
                 ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
-
+      
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -157,7 +177,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account
 
                 user.Street = Input.Street;
                 user.City = Input.City;
-                user.State = Input.State;
+                user.State = Input.District;
                 user.Name = Input.Name;
                 user.PhoneNumber = Input.PhoneNumber;
                 

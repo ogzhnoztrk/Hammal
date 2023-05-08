@@ -40,6 +40,7 @@ namespace HammalWeb.Areas.Admin.Controllers
 
 
         }
+        
 
         //GET
         public IActionResult CategoryDetail(int? Id)
