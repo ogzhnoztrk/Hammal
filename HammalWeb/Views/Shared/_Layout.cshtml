@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hammal</title>
+    <title>Hammal - @ViewData["Title"]</title>
   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -33,13 +33,13 @@
           <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
           <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
           <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-          <li>  <a type="button" asp-controller="RoleAdmin" asp-action="Index" asp-area="Admin" class="btn btn-sm btn-warning ">Teklif Al</a></li>
+          @*<li>  <a type="button" asp-controller="RoleAdmin" asp-action="Index" asp-area="Admin" class="btn btn-sm btn-warning ">Teklif Al</a></li>*@
         </ul>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+        @*<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
           <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
         </form>
-
+*@
         <div class="text-end">
          
              <partial name="_LoginPartial" />
@@ -49,12 +49,12 @@
   </header>
  
     <main role="main" class="mb-2">
-    <div class="row">
-      <div class="col-md-12">
+    <div class="">
+      
         
       <partial name="_Notification" />
       @RenderBody()
-      </div>
+      </>
       </div>
     </main>
  
