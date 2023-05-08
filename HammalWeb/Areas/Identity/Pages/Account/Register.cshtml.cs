@@ -162,29 +162,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account
                 ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
-        [HttpGet]
-        [Route("district")]
-        public async Task<IEnumerable<SelectListItem>> GetDistricts(string id)
-        {
-            var a = Int32.Parse(id);
-            Input = new InputModel()
-            {
-                AddressVM = new()
-                {
-                    
-                    DistrictList = _unitOfWork.District.GetAll(i => i.CityId == a).Select(i => new SelectListItem
-                    {
-                        Text = i.Name,
-                        Value = i.Id.ToString()
-                    }),
-                }
-
-            };
-
-            return Input.AddressVM.DistrictList;
-             
-        }
-
+      
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
