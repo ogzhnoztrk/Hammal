@@ -4,8 +4,11 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Hammal.DataAccess.Repository.IRepository;
+using Hammal.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,13 +19,17 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly IUnitOfWork _unitOfWork;
 
+        
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -30,6 +37,9 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string Username { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -62,10 +72,16 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(IdentityUser user)
         {
+           
+
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var applicationUser  = _unitOfWork.ApplicationUser.GetFirstOrDefault(x => x.Id == user.Id);
+            
 
             Username = userName;
+            Name = applicationUser.Name;
+            Email = applicationUser.Email;
 
             Input = new InputModel
             {
