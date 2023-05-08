@@ -22,6 +22,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
         // services.AddDefaultIdentity<IdentityUser>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
+//builder.Services.AddScoped<UserManager<ApplicationUser>>();//builder.Services.AddScoped<UserManager<ApplicationUser>>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
