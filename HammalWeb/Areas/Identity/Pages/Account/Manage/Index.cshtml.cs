@@ -39,8 +39,11 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         public string Username { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        
+        public string City { get; set; }
+        public string District { get; set; }
+        public string Street { get; set; }
 
+        public Address Address { get; set; }
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -77,11 +80,16 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var applicationUser  = _unitOfWork.ApplicationUser.GetFirstOrDefault(x => x.Id == user.Id);
-            
+            var addresses = _unitOfWork.Address.GetFirstOrDefault(x => x.ApplicationUserId == user.Id,includeProperties:"District");
 
             Username = userName;
             Name = applicationUser.Name;
             Email = applicationUser.Email;
+            City = _unitOfWork.City.GetFirstOrDefault(x => x.Id == addresses.District.CityId).Name.ToUpper();
+            District = addresses.District.Name.ToUpper();
+            Street = addresses.Street.ToUpper();
+
+
 
             Input = new InputModel
             {
