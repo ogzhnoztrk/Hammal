@@ -28,6 +28,7 @@
         <select asp-for="Input.City" id="citiesDropdown" asp-items="@Model.Input.AddressVM.CityList" class="form-select">
           <option disabled selected>--Select City--</option>
         </select>
+                <span asp-validation-for="Input.Street" class="text-danger"></span>
 
 
       </div>
@@ -36,6 +37,7 @@
         <select asp-for="Input.District" id="districtDropdown" class="form-select">
           <option disabled selected>--Select District--</option>
         </select>
+                <span asp-validation-for="Input.Street" class="text-danger"></span>
 
       </div>
       <div class="form-floating mb-3 col-md-6">
