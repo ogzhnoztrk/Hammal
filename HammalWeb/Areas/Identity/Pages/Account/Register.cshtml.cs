@@ -149,11 +149,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account
                         Value = i.Id.ToString()
                         
                     }),
-                    //DistrictList = _unitOfWork.District.GetAll().Select(i => new SelectListItem
-                    //{
-                    //    Text = i.Name,
-                    //    Value = i.Id.ToString()
-                    //}),
+                    
                 }
 
             };
@@ -175,11 +171,13 @@ namespace HammalWeb.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
-                user.Street = Input.Street;
-                user.City = Input.City;
-                user.State = Input.District;
+                //user.Street = Input.Street;
+                //user.City = Input.City;
+                //user.State = Input.District;
                 user.Name = Input.Name;
                 user.PhoneNumber = Input.PhoneNumber;
+               
+                
                 
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -197,6 +195,15 @@ namespace HammalWeb.Areas.Identity.Pages.Account
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);
                     }
+
+                    Address address = new();
+                    address.Street = Input.Street;
+                    address.ApplicationUserId = user.Id;
+                    address.DistrictId = Int32.Parse(Input.District);
+
+                    _unitOfWork.Address.Add(address);
+                    _unitOfWork.Save();
+
 
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -220,6 +227,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
+                    
                 }
                 foreach (var error in result.Errors)
                 {
