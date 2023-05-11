@@ -22,6 +22,8 @@ namespace Hammal.DataAccess.Repository
             City = new CityRepository(_db);
             District = new DistrictRepository(_db);
             Address = new AddressRepository(_db);
+            Ability = new AbilityRepository(_db);
+            UserAbility = new UserAbilityRepository(_db);
 
         }
 
@@ -32,6 +34,8 @@ namespace Hammal.DataAccess.Repository
         public ICityRepository City { get; set; }
         public IDistrictRepository District { get; set; }
         public IAddressRepository Address { get; set; }
+        public IAbilityRepository Ability { get; set;  }
+        public IUserAbilityRepository UserAbility { get; set; }
 
         public void Save()
         {

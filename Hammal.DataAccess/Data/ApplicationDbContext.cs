@@ -20,5 +20,7 @@ namespace Hammal.DataAccess.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<Address> Addresses{ get; set; }
+        public DbSet<Ability> Abilities{ get; set; }
+        public DbSet<UserAbility> UserAbilities{ get; set; }
     }
 }
