@@ -15,7 +15,6 @@ namespace Hammal.DataAccess.Repository.IRepository
         ICityRepository City { get; }
         IDistrictRepository District { get; }
         IAddressRepository Address { get; }
-        IAbilityRepository Ability { get; }
         IUserAbilityRepository UserAbility{ get; }
         void Save();
     }
