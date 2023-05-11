@@ -9,6 +9,6 @@ namespace Hammal.DataAccess.Repository.IRepository
 {
     public interface IApplicationUserRepository : IRepository<ApplicationUser>
     {
-        //void Update(Category category);
+        void Update(ApplicationUser obj);
     }
 }

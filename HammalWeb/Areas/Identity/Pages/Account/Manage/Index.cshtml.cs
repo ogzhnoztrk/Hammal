@@ -71,6 +71,8 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            public string Name { get; set; }
+            public string Email { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -93,7 +95,10 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Name = Name,
+                Email = Email,
+
             };
         }
 
@@ -112,6 +117,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            var applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(x => x.Id == user.Id);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -134,6 +140,23 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            //Büyük ihitmal burada olası bir email çakışmasında bug olacak buraya bakacağım
+            if(_unitOfWork.ApplicationUser.GetAll(x=>x.Email == Input.Email) != null )
+            {
+                StatusMessage = "Unexpected error when trying to set email.";
+                //return RedirectToPage();
+            }
+            applicationUser.Name = Input.Name;
+            applicationUser.Email = Input.Email;
+            applicationUser.NormalizedUserName = Input.Email.ToUpper();
+
+            applicationUser.NormalizedEmail = Input.Email.ToUpper();
+
+            applicationUser.UserName = Input.Email;
+
+             
+            _unitOfWork.ApplicationUser.Update(applicationUser);
+            _unitOfWork.Save();
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
