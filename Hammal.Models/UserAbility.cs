@@ -18,9 +18,9 @@ namespace Hammal.Models
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
-        public int AbilityId { get; set; }
-        [ForeignKey("AbilityId")]
+        public int AltCategoryId { get; set; }
+        [ForeignKey("AltCategoryId")]
         [ValidateNever]
-        public Ability Ability { get; set; }
+        public AltCategory AltCategory { get; set; }
     }
 }
