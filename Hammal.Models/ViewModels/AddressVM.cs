@@ -9,7 +9,7 @@ namespace Hammal.Models.ViewModels
 {
     public class AddressVM
     {
-        public Address Address{ get; set; }
+        //public Address Address{ get; set; }
         public IEnumerable<SelectListItem> CityList { get; set; }
         public IEnumerable<SelectListItem> DistrictList { get; set; }
     }
