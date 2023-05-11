@@ -63,6 +63,29 @@ namespace HammalWeb.Areas.Admin.Controllers
 
         }
 
+
+    //GET
+    public IActionResult EmployeeDetailView(int? id)
+    {
+
+
+      if (id == 0 || id == null)
+      {
+        return View("EmployeeForm");
+
+      }
+      else
+      {
+        var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
+
+
+        return View("CategoryDetail", altCategoryFromDb);
+      }
+
+
+    }
+
+
     //POST
     [HttpPost]
         [ValidateAntiForgeryToken]
