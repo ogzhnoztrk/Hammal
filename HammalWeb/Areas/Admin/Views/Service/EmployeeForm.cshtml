@@ -1,6 +1,5 @@
 ﻿@model SystemUser
 
-
 <main class="container">
 
   <div class="my-3 p-3 bg-body rounded shadow-sm">
@@ -8,8 +7,19 @@
 
     <h5>Employee Kayıt Sayfası</h5>
     <form id="registerForm" class="row"  method="post">
-     
       <hr />
+      <div class="form-floating mb-3 col-md-6">
+        <select class="form-control" id="categoryDropdown"></select>
+      </div>
+      <div class="form-floating mb-3 col-md-6">
+        <select class="form-control" id="altCategoryDropdown" ></select>
+      </div>
+      
+
+
+
+
+
       <div class="form-floating mb-3">
         <input asp-for="@Model.Name" class="form-control" placeholder="Name" area-required="true" />
         <label asp-for="@Model.Name"></label>
@@ -79,23 +89,23 @@
 
   <script>
     $(function () {
-      $('#citiesDropdown').change(function () {
+      $('#categoryDropdown').change(function () {
         debugger;
 
         var id = $(this).val();
         //$('#districtDropdown').empty();
-        $('#districtDropdown').append(id)
+        $('#altCategoryDropdown').append(id)
 
         $.ajax({
-          url: "@Url.Action("GetDistricts","Identity",new {Area="Identity"})",
+          url: "@Url.Action("GetAltCategoryById","Category")",
           type: 'GET',
           data: { id: id },
           success: function (data) {
-            $('#districtDropdown').empty();
-            $('#districtDropdown').append($('<option>').text('--Select District--').attr('value', ''));
+            $('#altCategoryDropdown').empty();
+            $('#altCategoryDropdown').append($('<option>').text('--Select AltCategory--').attr('value', ''));
 
-            $.each(data, function (i, item) {
-              $('#districtDropdown').append($('<option>').text(item.text).attr('value', item.value));
+            $.each(data.data, function (i, item) {
+              $('#altCategoryDropdown').append($('<option>').text(item.name).val(item.id));
             });
           },
           error: function (xhr, status, error) {
@@ -106,6 +116,51 @@
 
       });
     });
+
+
+    $(document).ready(function () {
+      // Ajax isteği gönder
+      $.ajax({
+        url: '@Url.Action("GetAllAltCategories","Category")',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+          // Ajax isteği başarılı olduğunda dropdown listesini güncelle
+          var dropdown = $('#altCategoryDropdown');
+          dropdown.empty();
+
+          // Verileri dropdown listesine ekle
+          $.each(data.data, function (i, item) {
+            dropdown.append($('<option>').text(item.name).val(item.id));
+          });
+        },
+        error: function () {
+          // Ajax isteği başarısız olduğunda hata işleme kodu
+        }
+      });
+    });
+    // Ajax isteği gönder
+    $.ajax({
+      url: '@Url.Action("GetAll","Category")',
+      type: 'GET',
+      dataType: 'json',
+      success: function (data) {
+        // Ajax isteği başarılı olduğunda dropdown listesini güncelle
+        var dropdown = $('#categoryDropdown');
+        dropdown.empty();
+
+        // Verileri dropdown listesine ekle
+        $.each(data.data, function (i, item) {
+          dropdown.append($('<option>').text(item.name).val(item.id));
+        });
+      },
+      error: function () {
+        // Ajax isteği başarısız olduğunda hata işleme kodu
+      }
+    });
+       
+
+
   </script>
 }
 
