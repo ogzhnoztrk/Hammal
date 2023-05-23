@@ -42,6 +42,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         public string City { get; set; }
         public string District { get; set; }
         public string Street { get; set; }
+        public string FullAdress{ get; set; }
 
         public Address Address { get; set; }
         /// <summary>
@@ -90,7 +91,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
             City = _unitOfWork.City.GetFirstOrDefault(x => x.Id == addresses.District.CityId).Name.ToUpper();
             District = addresses.District.Name.ToUpper();
             Street = addresses.Street.ToUpper();
-
+            FullAdress = addresses.FullAddress.ToUpper();
 
 
             Input = new InputModel

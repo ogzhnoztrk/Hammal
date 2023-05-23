@@ -35,6 +35,7 @@ namespace Hammal.Models
         [ValidateNever]
         public District District { get; set; }
         public string Street { get; set; }
+        public string FullAddress { get; set; }
 
     }
 }
