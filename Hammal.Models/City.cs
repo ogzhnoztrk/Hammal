@@ -13,5 +13,7 @@ namespace Hammal.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public virtual ICollection<District> Districts { get; set; }
+
     }
 }

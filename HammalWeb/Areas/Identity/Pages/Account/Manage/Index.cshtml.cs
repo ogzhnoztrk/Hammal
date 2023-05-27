@@ -9,19 +9,22 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
+using Hammal.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace HammalWeb.Areas.Identity.Pages.Account.Manage
 {
+
     public class IndexModel : PageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IUnitOfWork _unitOfWork;
 
-        
+
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
@@ -36,6 +39,11 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        /// 
+        [BindProperty(SupportsGet = true)]
+        public int AbilityId { get; set; }
+
+        public double DegiskenDeneme = 3.5;
         public string Username { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -45,6 +53,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         public string FullAdress{ get; set; }
 
         public Address Address { get; set; }
+        public UserVM UserVM { get; set; }
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -78,20 +87,34 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(IdentityUser user)
         {
-           
+            
 
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+
             var applicationUser  = _unitOfWork.ApplicationUser.GetFirstOrDefault(x => x.Id == user.Id);
-            var addresses = _unitOfWork.Address.GetFirstOrDefault(x => x.ApplicationUserId == user.Id,includeProperties:"District");
+
+            var addresses = _unitOfWork.Address.GetAll(x => x.ApplicationUserId == user.Id,includeProperties:"District");
+            foreach (var address in addresses)
+            {
+                address.District.City = _unitOfWork.City.GetFirstOrDefault(i => i.Id == address.District.CityId);
+            }
+
+            var userAbilites= _unitOfWork.UserAbility.GetAll(x => x.ApplicationUserId == user.Id, includeProperties:"AltCategory");
+            
+
 
             Username = userName;
             Name = applicationUser.Name;
             Email = applicationUser.Email;
-            City = _unitOfWork.City.GetFirstOrDefault(x => x.Id == addresses.District.CityId).Name.ToUpper();
-            District = addresses.District.Name.ToUpper();
-            Street = addresses.Street.ToUpper();
-            FullAdress = addresses.FullAddress.ToUpper();
+         
+
+            UserVM =new() {
+                ApplicationUser = applicationUser,
+                Addresses = addresses,
+                UserAbilities =  userAbilites
+            };
+
 
 
             Input = new InputModel
@@ -162,5 +185,24 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }
+        
+
+        //AbilityDelete
+        public IActionResult OnPostAbilityDelete()
+        {
+            var userAbility = _unitOfWork.UserAbility.GetFirstOrDefault(x=> x.Id == AbilityId);
+            _unitOfWork.UserAbility.Remove(userAbility);
+            _unitOfWork.Save();
+            
+            return RedirectToPage();
+        }
+
+        //AbilityPost
+        public IActionResult OnPostAbilityPost()
+        {
+
+            return Page();
+        }
+
     }
 }

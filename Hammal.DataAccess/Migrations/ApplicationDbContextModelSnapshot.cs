@@ -51,7 +51,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("DistrictId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.Advertisement", b =>
@@ -87,7 +87,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Advertisements");
+                    b.ToTable("Advertisements", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.AltCategory", b =>
@@ -116,7 +116,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("AltCategories");
+                    b.ToTable("AltCategories", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.Category", b =>
@@ -140,7 +140,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.City", b =>
@@ -157,7 +157,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.District", b =>
@@ -179,7 +179,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Districts");
+                    b.ToTable("Districts", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.SystemUser", b =>
@@ -208,7 +208,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemUsers");
+                    b.ToTable("SystemUsers", (string)null);
                 });
 
             modelBuilder.Entity("Hammal.Models.UserAbility", b =>
@@ -232,7 +232,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("UserAbilities");
+                    b.ToTable("UserAbilities", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
