@@ -10,17 +10,18 @@ using System.Threading.Tasks;
 
 namespace Hammal.DataAccess.Repository
 {
-    public class ApplicationUserRepository : Repository<ApplicationUser>, IApplicationUserRepository
+    public class CityRepository : Repository<City>, ICityRepository
     {
-        private readonly ApplicationDbContext? _db;
-        public ApplicationUserRepository(ApplicationDbContext db) : base(db)
+        private readonly ApplicationDbContext _db;
+
+        public CityRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public void Update(ApplicationUser obj)
+        public void Update(City obj)
         {
-            _db.ApplicationUsers.Update(obj);
+            _db.Cities.Update(obj);
         }
     }
 }

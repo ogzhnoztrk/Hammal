@@ -4,14 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation; 
 
 namespace Hammal.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class City
     {
+        [Key]
+        public int Id { get; set; }
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
+        public virtual ICollection<District> Districts { get; set; }
+
     }
 }

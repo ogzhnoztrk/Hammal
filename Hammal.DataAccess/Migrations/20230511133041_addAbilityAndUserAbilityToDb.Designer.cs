@@ -4,6 +4,7 @@ using Hammal.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hammal.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230511133041_addAbilityAndUserAbilityToDb")]
+    partial class addAbilityAndUserAbilityToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,22 @@ namespace Hammal.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Hammal.Models.Ability", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Abilities");
+                });
 
             modelBuilder.Entity("Hammal.Models.Address", b =>
                 {
@@ -37,10 +56,6 @@ namespace Hammal.DataAccess.Migrations
                     b.Property<int>("DistrictId")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -51,7 +66,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("DistrictId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Hammal.Models.Advertisement", b =>
@@ -87,7 +102,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Advertisements", (string)null);
+                    b.ToTable("Advertisements");
                 });
 
             modelBuilder.Entity("Hammal.Models.AltCategory", b =>
@@ -116,7 +131,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("AltCategories", (string)null);
+                    b.ToTable("AltCategories");
                 });
 
             modelBuilder.Entity("Hammal.Models.Category", b =>
@@ -140,7 +155,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Hammal.Models.City", b =>
@@ -157,7 +172,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("Hammal.Models.District", b =>
@@ -179,36 +194,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Districts", (string)null);
-                });
-
-            modelBuilder.Entity("Hammal.Models.SystemUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AltCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SystemUsers", (string)null);
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("Hammal.Models.UserAbility", b =>
@@ -219,7 +205,7 @@ namespace Hammal.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AltCategoryId")
+                    b.Property<int>("AbilityId")
                         .HasColumnType("int");
 
                     b.Property<string>("ApplicationUserId")
@@ -228,11 +214,11 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AltCategoryId");
+                    b.HasIndex("AbilityId");
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("UserAbilities", (string)null);
+                    b.ToTable("UserAbilities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -506,9 +492,9 @@ namespace Hammal.DataAccess.Migrations
 
             modelBuilder.Entity("Hammal.Models.UserAbility", b =>
                 {
-                    b.HasOne("Hammal.Models.AltCategory", "AltCategory")
+                    b.HasOne("Hammal.Models.Ability", "Ability")
                         .WithMany()
-                        .HasForeignKey("AltCategoryId")
+                        .HasForeignKey("AbilityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -518,7 +504,7 @@ namespace Hammal.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AltCategory");
+                    b.Navigation("Ability");
 
                     b.Navigation("ApplicationUser");
                 });

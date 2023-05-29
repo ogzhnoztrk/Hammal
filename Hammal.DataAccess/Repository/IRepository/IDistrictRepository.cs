@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Hammal.DataAccess.Repository.IRepository
 {
-    public interface IApplicationUserRepository : IRepository<ApplicationUser>
+    public interface IDistrictRepository : IRepository<District>
     {
-        void Update(ApplicationUser obj);
+        void Update(District district);
     }
 }

@@ -4,6 +4,7 @@ using Hammal.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hammal.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230511210549_systemUserAddToDb")]
+    partial class systemUserAddToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,10 +40,6 @@ namespace Hammal.DataAccess.Migrations
                     b.Property<int>("DistrictId")
                         .HasColumnType("int");
 
-                    b.Property<string>("FullAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -51,7 +50,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("DistrictId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Hammal.Models.Advertisement", b =>
@@ -87,7 +86,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Advertisements", (string)null);
+                    b.ToTable("Advertisements");
                 });
 
             modelBuilder.Entity("Hammal.Models.AltCategory", b =>
@@ -116,7 +115,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("AltCategories", (string)null);
+                    b.ToTable("AltCategories");
                 });
 
             modelBuilder.Entity("Hammal.Models.Category", b =>
@@ -140,7 +139,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Hammal.Models.City", b =>
@@ -157,7 +156,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("Hammal.Models.District", b =>
@@ -179,7 +178,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Districts", (string)null);
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("Hammal.Models.SystemUser", b =>
@@ -188,9 +187,6 @@ namespace Hammal.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AltCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -208,7 +204,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SystemUsers", (string)null);
+                    b.ToTable("SystemUsers");
                 });
 
             modelBuilder.Entity("Hammal.Models.UserAbility", b =>
@@ -232,7 +228,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("UserAbilities", (string)null);
+                    b.ToTable("UserAbilities");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

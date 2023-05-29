@@ -17,5 +17,10 @@ namespace Hammal.DataAccess.Data
         public DbSet<AltCategory> AltCategories{ get; set; }
         public DbSet<Advertisement> Advertisements{ get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<District> Districts { get; set; }
+        public DbSet<Address> Addresses{ get; set; }
+        public DbSet<UserAbility> UserAbilities{ get; set; }
+        public DbSet<SystemUser> SystemUsers{ get; set; }
     }
 }
