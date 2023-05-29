@@ -153,11 +153,17 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
-
+            if (applicationUser.Email != Input.Email) { 
+                if (_unitOfWork.ApplicationUser.GetAll(x => x.Email == Input.Email) == null)
+                {
+                    await _userManager.SetUserNameAsync(user, Input.Email);
+                    await _userManager.SetEmailAsync(user, Input.Email);
+                    await _userManager.SetUserNameAsync(user, Input.Email);
+                    return RedirectToPage();
+                }
+            }
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            await _userManager.SetUserNameAsync(user, Input.Email);
-            await _userManager.SetEmailAsync(user, Input.Email);
-            await _userManager.SetUserNameAsync(user, Input.Email);
+
 
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -168,13 +174,17 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-     
 
-            applicationUser.Name = Input.Name;
+            if (Input.Name != applicationUser.Name)
+            {
+                applicationUser.Name = Input.Name;
+                _unitOfWork.ApplicationUser.Update(applicationUser);
+                _unitOfWork.Save();
 
-            
-            _unitOfWork.ApplicationUser.Update(applicationUser);
-            _unitOfWork.Save();
+
+            }
+
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
@@ -196,14 +206,18 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         {
             //List<string> selectedAbilityIds = Request.Form["checkbox"].ToList();
             var user = await _userManager.GetUserAsync(User);
-
+            
             foreach (int selectedAbilityId in selectedCheckboxes)
             {
-                _unitOfWork.UserAbility.Add(new()
+                if (_unitOfWork.UserAbility.GetFirstOrDefault(x => x.AltCategoryId == selectedAbilityId) == null)
                 {
-                    AltCategoryId = selectedAbilityId,
-                    ApplicationUserId = user.Id,
-                });
+                    _unitOfWork.UserAbility.Add(new()
+                    {
+                        AltCategoryId = selectedAbilityId,
+                        ApplicationUserId = user.Id,
+                    });
+                }
+              
             }
             _unitOfWork.Save();
             return RedirectToPage();
