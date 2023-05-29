@@ -8,48 +8,9 @@
 }
 
 
-<!-- User Details update Modal -->
-<div class="modal fade" id="PersonalDetailModal" tabindex="-1" aria-labelledby="PersonalDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="PersonalDetailModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            @*
-            .
-            .MODALIN İÇİ
-            .BURADA KULLANICINI BİLGİLERİNİ UPDATE ETME , EKLEME ÇIKARMA İŞLEMLERİ VAR
-            .
-            *@
-            <form id="profile-form" method="post">
-                <div class="card">
-
-                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                    <div class="form-floating">
-                        <input asp-for="Input.Name" class="form-control" />
-                        <label asp-for="Input.Name" class="form-label"></label>
-                    </div><div class="form-floating">
-                        <input asp-for="Input.Email" class="form-control" />
-                        <label asp-for="Input.Email" class="form-label"></label>
-                    </div>
-                    <div class="form-floating">
-                        <input asp-for="Input.PhoneNumber" class="form-control" />
-                        <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                    </div>
 
 
-                </div>
-                @*MODAL BUTTONS*@
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="update-profile-button" type="submit" class="btn btn-warning">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
 <section style="background-color: #eee;">
     <div class="container py-5">
@@ -117,6 +78,49 @@
                             <button type="button" class="btn btn-secondary text-end" data-bs-toggle="modal" data-bs-target="#PersonalDetailModal">
                                 Edit <i class="fa-regular fa-pen-to-square"></i>
                             </button>
+                            <!-- User Details update Modal -->
+                            <div class="modal fade" id="PersonalDetailModal" tabindex="-1" aria-labelledby="PersonalDetailModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="PersonalDetailModalLabel">Modal title</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        @*
+                                        .
+                                        .MODALIN İÇİ
+                                        .BURADA KULLANICINI BİLGİLERİNİ UPDATE ETME , EKLEME ÇIKARMA İŞLEMLERİ VAR
+                                        .
+                                        *@
+                                        <form id="profile-form" method="post">
+                                            <div class="card">
+
+                                                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                                                <div class="form-floating">
+                                                    <input asp-for="Input.Name" class="form-control" />
+                                                    <label asp-for="Input.Name" class="form-label"></label>
+                                                </div><div class="form-floating">
+                                                    <input asp-for="Input.Email" class="form-control" />
+                                                    <label asp-for="Input.Email" class="form-label"></label>
+                                                </div>
+                                                <div class="form-floating">
+                                                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                                                    <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                                                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                                                </div>
+
+
+                                            </div>
+                                            @*MODAL BUTTONS*@
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button id="update-profile-button" type="submit" class="btn btn-warning">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            @*Modalın sonu*@
                         </div>
                     </div>
                     @*Kullanıcının Bilgileri*@
@@ -200,7 +204,7 @@
                                     </div>
                                     <div class="col-6 text-end ">
                                         <!--User Address Insert Button -->
-                                        <button type="button" class="btn">
+                                        <button  type="button" class="btn ">
                                             <i class="fa-solid fa-square-plus fa-2xl" style="color:#5C636A"></i></i>
                                         </button>
                                     </div>
@@ -230,6 +234,7 @@
 
                         </div>
                     </div>
+                    @*<i class="fa-solid fa-square-plus fa-2xl" style="color:#5C636A"></i></i>*@
 
 
                     @*Yetenekler*@
@@ -242,10 +247,41 @@
                                         <p class="mb-2"><span class="text-primary font-italic me-2">Yetenekler</span></p>
                                     </div>
                                     <div class="col-6 text-end ">
-                                        <!--User Ability Insert Button -->
-                                        <button type="button" class="btn">
+                                        <!--User Ability Modal Button trigger -->
+                                        <button type="button" class="btn text-end" data-bs-toggle="modal" data-bs-target="#AbilityInsertModal">
                                             <i class="fa-solid fa-square-plus fa-2xl" style="color:#5C636A"></i></i>
                                         </button>
+                                        <!-- User Ability Insert Modal -->
+                                        <div class="modal fade" id="AbilityInsertModal" tabindex="-1" aria-labelledby="AbilityInsertModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="AbilityInsertModalLabel">Modal title</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                  
+                                                    <form method="post">
+                                                        <div class="modal-body" style="overflow:auto; height:500px">
+                                                            @foreach (var category in Model.AltCategories)
+                                                            {
+
+                                                                <input name="selectedCheckboxes" type="checkbox" class="btn-check" value="@category.Id" id="@category.Id" autocomplete="off" />
+                                                                    <label class="btn btn-outline-success m-1" for="@category.Id">@category.Name</label>
+                                                            
+                                                            }
+                                                        
+                                                        </div>
+                                                    
+                                                            @*MODAL BUTTONS*@
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button id="" type="submit" asp-page-handler="AbilityPost" class="btn btn-warning">Save</button>
+                                                            </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*Modalın sonu*@
                                     </div>
                                 </div>
                             </div>

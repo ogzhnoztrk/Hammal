@@ -42,6 +42,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         /// 
         [BindProperty(SupportsGet = true)]
         public int AbilityId { get; set; }
+        public IEnumerable<AltCategory> AltCategories{ get; set; }
 
         public double DegiskenDeneme = 3.5;
         public string Username { get; set; }
@@ -114,7 +115,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
                 Addresses = addresses,
                 UserAbilities =  userAbilites
             };
-
+            AltCategories = _unitOfWork.AltCategory.GetAll();
 
 
             Input = new InputModel
@@ -154,6 +155,10 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            await _userManager.SetUserNameAsync(user, Input.Email);
+            await _userManager.SetEmailAsync(user, Input.Email);
+            await _userManager.SetUserNameAsync(user, Input.Email);
+
             if (Input.PhoneNumber != phoneNumber)
             {
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
@@ -163,22 +168,11 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+     
 
-            //Büyük ihitmal burada olası bir email çakışmasında bug olacak buraya bakacağım
-            if(_unitOfWork.ApplicationUser.GetAll(x=>x.Email == Input.Email) != null )
-            {
-                StatusMessage = "Unexpected error when trying to set email.";
-                //return RedirectToPage();
-            }
             applicationUser.Name = Input.Name;
-            applicationUser.Email = Input.Email;
-            applicationUser.NormalizedUserName = Input.Email.ToUpper();
 
-            applicationUser.NormalizedEmail = Input.Email.ToUpper();
-
-            applicationUser.UserName = Input.Email;
-
-             
+            
             _unitOfWork.ApplicationUser.Update(applicationUser);
             _unitOfWork.Save();
             await _signInManager.RefreshSignInAsync(user);
@@ -198,10 +192,21 @@ namespace HammalWeb.Areas.Identity.Pages.Account.Manage
         }
 
         //AbilityPost
-        public IActionResult OnPostAbilityPost()
+        public async Task<IActionResult> OnPostAbilityPostAsync(List<int> selectedCheckboxes)
         {
+            //List<string> selectedAbilityIds = Request.Form["checkbox"].ToList();
+            var user = await _userManager.GetUserAsync(User);
 
-            return Page();
+            foreach (int selectedAbilityId in selectedCheckboxes)
+            {
+                _unitOfWork.UserAbility.Add(new()
+                {
+                    AltCategoryId = selectedAbilityId,
+                    ApplicationUserId = user.Id,
+                });
+            }
+            _unitOfWork.Save();
+            return RedirectToPage();
         }
 
     }
