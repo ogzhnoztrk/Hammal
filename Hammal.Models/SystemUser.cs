@@ -10,7 +10,7 @@ namespace Hammal.Models
     public class SystemUser
     {
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -19,6 +19,7 @@ namespace Hammal.Models
         public int? AddressId { get; set; }
         public string? PhoneNumber { get; set; }
         public int? AltCategoryId { get; set; }
+        public int? CategoryId { get; set; }
         
       
   

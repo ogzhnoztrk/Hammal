@@ -208,8 +208,10 @@ namespace HammalWeb.Areas.Identity.Pages.Account
 
           var userId = await _userManager.GetUserIdAsync(user);
 
+          Guid userGuid = Guid.NewGuid();
+          Guid.TryParse(userId, out userGuid);
           SystemUser sysUser = new SystemUser();
-          sysUser.Id = user.Id;
+          sysUser.Id = userGuid;
           sysUser.Name = user.Name;
           sysUser.Email = user.Email;
           sysUser.Role = Input.Role;
