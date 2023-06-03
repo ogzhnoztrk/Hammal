@@ -15,10 +15,10 @@ namespace HammalWeb.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailSender;
-        private readonly IRepository<SystemUser> _repo;
+
         public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
-            _repo = UnitOfWork.GetRepository<SystemUser>();
+          
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
         }
@@ -133,49 +133,7 @@ namespace HammalWeb.Areas.Admin.Controllers
             return View(category);
         }
 
-        //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult UpsertSystemUser(SystemUser systemUser)
-        {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            
-            //claim.Value mevcut giriş yapan kullanıcının idsini veriyor
-
-            if (claim != null)
-            {
-                bool newRecord = false;
-                var existingRecord = _unitOfWork.SystemUser.GetFirstOrDefault(x => x.Email == systemUser.Email);
-                if (ModelState.IsValid)
-                {
-                    if (systemUser.Id == Guid.Empty)
-                    {
-                        if (existingRecord == null)
-                        {
-                            _unitOfWork.SystemUser.Add(systemUser);
-                            TempData["success"] = "Kategori Oluşturuldu";
-                            _unitOfWork.Save();
-                            return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            existingRecord.Id = systemUser.Id;
-                            existingRecord.AddressId = systemUser.AddressId;
-                            existingRecord.Name = systemUser.Name;
-                            existingRecord.Email = systemUser.Email;
-                            existingRecord.CategoryId = systemUser.CategoryId;
-                            existingRecord.AltCategoryId = systemUser.AltCategoryId;
-                            _unitOfWork.SystemUser.Update(existingRecord);
-                            TempData["success"] = "Kategori Güncellendi";
-                            _unitOfWork.Save();
-                            return RedirectToAction("Index");
-                        }
-                    }
-                }
-            }
-            return RedirectToPage("Index");
-        }
+    
 
 
         #region API CALLS

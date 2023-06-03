@@ -208,18 +208,8 @@ namespace HammalWeb.Areas.Identity.Pages.Account
 
           var userId = await _userManager.GetUserIdAsync(user);
 
-          Guid userGuid = Guid.NewGuid();
-          Guid.TryParse(userId, out userGuid);
-          SystemUser sysUser = new SystemUser();
-          sysUser.Id = userGuid;
-          sysUser.Name = user.Name;
-          sysUser.Email = user.Email;
-          sysUser.Role = Input.Role;
-          sysUser.AddressId = address.Id;
-          sysUser.PhoneNumber = user.PhoneNumber;
-
-          _unitOfWork.SystemUser.Add(sysUser);
-          _unitOfWork.Save();
+        
+    
 
 
           var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
