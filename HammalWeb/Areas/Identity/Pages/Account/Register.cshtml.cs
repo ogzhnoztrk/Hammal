@@ -209,12 +209,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account
           var userId = await _userManager.GetUserIdAsync(user);
 
         
-          SystemUser sysUser = new SystemUser();
-          sysUser.Id = userId;
-         
-
-          _unitOfWork.SystemUser.Add(sysUser);
-          _unitOfWork.Save();
+    
 
 
           var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

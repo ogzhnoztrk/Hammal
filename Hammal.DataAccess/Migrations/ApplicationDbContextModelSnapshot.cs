@@ -178,28 +178,6 @@ namespace Hammal.DataAccess.Migrations
                     b.ToTable("Districts");
                 });
 
-            modelBuilder.Entity("Hammal.Models.SystemUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("AltCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("SystemUsers");
-                });
-
             modelBuilder.Entity("Hammal.Models.UserAbility", b =>
                 {
                     b.Property<int>("Id")
@@ -491,17 +469,6 @@ namespace Hammal.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("City");
-                });
-
-            modelBuilder.Entity("Hammal.Models.SystemUser", b =>
-                {
-                    b.HasOne("Hammal.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Hammal.Models.UserAbility", b =>

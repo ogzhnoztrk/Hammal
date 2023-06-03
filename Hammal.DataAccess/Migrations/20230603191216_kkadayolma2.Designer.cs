@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hammal.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230603185236_kkadayolma")]
-    partial class kkadayolma
+    [Migration("20230603191216_kkadayolma2")]
+    partial class kkadayolma2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,7 +88,7 @@ namespace Hammal.DataAccess.Migrations
 
                     b.ToTable("Advertisements");
                 });
-            
+
             modelBuilder.Entity("Hammal.Models.AltCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -179,28 +179,6 @@ namespace Hammal.DataAccess.Migrations
                     b.HasIndex("CityId");
 
                     b.ToTable("Districts");
-                });
-
-            modelBuilder.Entity("Hammal.Models.SystemUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("AltCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("SystemUsers");
                 });
 
             modelBuilder.Entity("Hammal.Models.UserAbility", b =>
@@ -494,17 +472,6 @@ namespace Hammal.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("City");
-                });
-
-            modelBuilder.Entity("Hammal.Models.SystemUser", b =>
-                {
-                    b.HasOne("Hammal.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("Hammal.Models.UserAbility", b =>
