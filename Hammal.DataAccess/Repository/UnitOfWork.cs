@@ -1,9 +1,11 @@
 ﻿using Hammal.DataAccess.Data;
 using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +13,8 @@ namespace Hammal.DataAccess.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private ApplicationDbContext _db;
+        private static ApplicationDbContext _db;
+
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -26,8 +29,12 @@ namespace Hammal.DataAccess.Repository
             SystemUser = new SystemUserRepository(_db);
 
         }
+        public static IRepository<T> GetRepository<T>() where T : class
+        {
+          return new Repository<T>(_db);
+        }
 
-        public ICategoryRepository Category { get; private set; }
+         public ICategoryRepository Category { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
         public IAdvertisementRepository Advertisement { get; private set; }
         public IAltCategoryRepository AltCategory { get; private set; }
@@ -41,5 +48,7 @@ namespace Hammal.DataAccess.Repository
         {
             _db.SaveChanges();
         }
-    }
+   
+
+  }
 }

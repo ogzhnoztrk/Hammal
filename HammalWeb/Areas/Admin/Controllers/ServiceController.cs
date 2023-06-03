@@ -1,8 +1,11 @@
-﻿using Hammal.DataAccess.Repository.IRepository;
+﻿using Hammal.DataAccess.Repository;
+using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 
 namespace HammalWeb.Areas.Admin.Controllers
 {
@@ -12,8 +15,10 @@ namespace HammalWeb.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailSender;
+        private readonly IRepository<SystemUser> _repo;
         public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
+            _repo = UnitOfWork.GetRepository<SystemUser>();
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
         }
@@ -34,7 +39,7 @@ namespace HammalWeb.Areas.Admin.Controllers
             }
             else
             {
-               var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+                var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
 
                 return View(categoryFromDb);
             }
@@ -47,47 +52,47 @@ namespace HammalWeb.Areas.Admin.Controllers
         {
 
 
-          if (id == 0 || id == null)
-          {
-            return View("CategoryDetail");
+            if (id == 0 || id == null)
+            {
+                return View("CategoryDetail");
 
-          }
-          else
-          {
-            var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
+            }
+            else
+            {
+                var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
 
 
-            return View("CategoryDetail", altCategoryFromDb);
-          }
+                return View("CategoryDetail", altCategoryFromDb);
+            }
 
 
         }
 
 
-    //GET
-    public IActionResult EmployeeDetailView(int? id)
-    {
+        //GET
+        public IActionResult EmployeeDetailView(int? id)
+        {
 
 
-      if (id == 0 || id == null)
-      {
-        return View("EmployeeForm");
+            if (id == 0 || id == null)
+            {
+                return View("EmployeeForm");
 
-      }
-      else
-      {
-        var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
-
-
-        return View("CategoryDetail", altCategoryFromDb);
-      }
+            }
+            else
+            {
+                var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
 
 
-    }
+                return View("CategoryDetail", altCategoryFromDb);
+            }
 
 
-    //POST
-    [HttpPost]
+        }
+
+
+        //POST
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Upsert(Category category)
         {
@@ -128,6 +133,49 @@ namespace HammalWeb.Areas.Admin.Controllers
             return View(category);
         }
 
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpsertSystemUser(SystemUser systemUser)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            
+            //claim.Value mevcut giriş yapan kullanıcının idsini veriyor
+
+            if (claim != null)
+            {
+                bool newRecord = false;
+                var existingRecord = _unitOfWork.SystemUser.GetFirstOrDefault(x => x.Email == systemUser.Email);
+                if (ModelState.IsValid)
+                {
+                    if (systemUser.Id == Guid.Empty)
+                    {
+                        if (existingRecord == null)
+                        {
+                            _unitOfWork.SystemUser.Add(systemUser);
+                            TempData["success"] = "Kategori Oluşturuldu";
+                            _unitOfWork.Save();
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            existingRecord.Id = systemUser.Id;
+                            existingRecord.AddressId = systemUser.AddressId;
+                            existingRecord.Name = systemUser.Name;
+                            existingRecord.Email = systemUser.Email;
+                            existingRecord.CategoryId = systemUser.CategoryId;
+                            existingRecord.AltCategoryId = systemUser.AltCategoryId;
+                            _unitOfWork.SystemUser.Update(existingRecord);
+                            TempData["success"] = "Kategori Güncellendi";
+                            _unitOfWork.Save();
+                            return RedirectToAction("Index");
+                        }
+                    }
+                }
+            }
+            return RedirectToPage("Index");
+        }
 
 
         #region API CALLS
