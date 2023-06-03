@@ -149,6 +149,8 @@ namespace HammalWeb.Areas.Customer.Controllers
       
           if (existingRecord == null)
           {
+                    systemUser.ApplicationUserId = claim.Value;
+
             _unitOfWork.SystemUser.Add(systemUser);
             TempData["success"] = "Kategori Oluşturuldu";
             _unitOfWork.Save();
