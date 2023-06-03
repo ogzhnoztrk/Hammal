@@ -1,67 +1,71 @@
-﻿using Hammal.DataAccess.Repository.IRepository;
+﻿using Hammal.DataAccess.Repository;
+using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
 namespace HammalWeb.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+  [Area("Admin")]
 
-    public class ServiceController : Controller
+  public class ServiceController : Controller
+  {
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IEmailSender _emailSender;
+    private readonly IRepository<SystemUser> _repo;
+    public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IEmailSender _emailSender;
-        public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
-        {
-            _unitOfWork = unitOfWork;
-            _emailSender = emailSender;
-        }
-        public IActionResult Index()
-        {
-            return View();
-        }
+      _repo = UnitOfWork.GetRepository<SystemUser>();
+      _unitOfWork = unitOfWork;
+      _emailSender = emailSender;
+    }
+    public IActionResult Index()
+    {
+      return View();
+    }
 
-        //GET
-        public IActionResult Upsert(int? id)
-        {
+    //GET
+    public IActionResult Upsert(int? id)
+    {
 
 
-            if (id == 0 || id == null)
-            {
-                return View();
+      if (id == 0 || id == null)
+      {
+        return View();
 
-            }
-            else
-            {
-               var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+      }
+      else
+      {
+        var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
 
-                return View(categoryFromDb);
-            }
-
-
-        }
-
-        //GET
-        public IActionResult CategoryDetail(int? id)
-        {
+        return View(categoryFromDb);
+      }
 
 
-          if (id == 0 || id == null)
-          {
-            return View("CategoryDetail");
+    }
 
-          }
-          else
-          {
-            var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
+    //GET
+    public IActionResult CategoryDetail(int? id)
+    {
 
 
-            return View("CategoryDetail", altCategoryFromDb);
-          }
+      if (id == 0 || id == null)
+      {
+        return View("CategoryDetail");
+
+      }
+      else
+      {
+        var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
 
 
-        }
+        return View("CategoryDetail", altCategoryFromDb);
+      }
+
+
+    }
 
 
     //GET
@@ -88,81 +92,116 @@ namespace HammalWeb.Areas.Admin.Controllers
 
     //POST
     [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Category category)
+    [ValidateAntiForgeryToken]
+    public IActionResult Upsert(Category category)
+    {
+      var categoriesFromDb = _unitOfWork.Category.GetFirstOrDefault(filter => filter.Name == category.Name);
+      if (ModelState.IsValid)
+      {
+        if (category.Id == 0)
         {
-            var categoriesFromDb = _unitOfWork.Category.GetFirstOrDefault(filter => filter.Name == category.Name);
-            if (ModelState.IsValid)
-            {
-                if (category.Id == 0)
-                {
-                    if (categoriesFromDb == null)
-                    {
-                        _unitOfWork.Category.Add(category);
-                        TempData["success"] = "Kategori Oluşturuldu";
-                        _unitOfWork.Save();
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        TempData["error"] = "Kategori Mevcut";
-                        return RedirectToAction("Index");
-                    }
-                }
-                else
-                {
-                    if (categoriesFromDb == null)
-                    {
-                        _unitOfWork.Category.Update(category);
-                        TempData["success"] = "Kategori Güncellendi";
-                        _unitOfWork.Save();
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        TempData["error"] = "Kategori Mevcut";
-                        return RedirectToAction("Index");
-                    }
-                }
-            }
-            return View(category);
+          if (categoriesFromDb == null)
+          {
+            _unitOfWork.Category.Add(category);
+            TempData["success"] = "Kategori Oluşturuldu";
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+          }
+          else
+          {
+            TempData["error"] = "Kategori Mevcut";
+            return RedirectToAction("Index");
+          }
         }
-
-
-
-        #region API CALLS
-        [HttpGet]
-        public IActionResult GetAll()
+        else
         {
-            var categoryList = _unitOfWork.Category.GetAll();
-            return Json(new { data = categoryList });
-
+          if (categoriesFromDb == null)
+          {
+            _unitOfWork.Category.Update(category);
+            TempData["success"] = "Kategori Güncellendi";
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+          }
+          else
+          {
+            TempData["error"] = "Kategori Mevcut";
+            return RedirectToAction("Index");
+          }
         }
+      }
+      return View(category);
+    }
 
-
-        [HttpDelete]
-
-        public IActionResult Delete(int? id)
+    //POST
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpsertSystemUser(SystemUser systemUser)
+    {
+      bool newRecord = false;
+      var existingRecord =  _unitOfWork.SystemUser.GetFirstOrDefault(x=>x.Email==systemUser.Email);
+      if (ModelState.IsValid)
+      {
+        if (systemUser.Id == Guid.Empty)
         {
-            var obj = _unitOfWork.Category.GetFirstOrDefault(c => c.Id == id);
+          if (existingRecord == null)
+          {
+            _unitOfWork.SystemUser.Add(systemUser);
+            TempData["success"] = "Kategori Oluşturuldu";
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+          }
+          else
+          {
+            existingRecord.Id=systemUser.Id;
+            existingRecord.AddressId=systemUser.AddressId;
+            existingRecord.Name=systemUser.Name;
+            existingRecord.Email=systemUser.Email;
+            existingRecord.CategoryId = systemUser.CategoryId;
+            existingRecord.AltCategoryId=systemUser.AltCategoryId;  
+            _unitOfWork.SystemUser.Update(existingRecord);
+            TempData["success"] = "Kategori Güncellendi";
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+          }
+        }     
+      }
+      return View("Index");
+    }
 
-            if (obj == null)
-            {
-                return Json(new { success = false, message = "Error while deleting." });
-            }
 
-
-
-            _unitOfWork.Category.Remove(obj);
-            _unitOfWork.Save(); TempData["success"] = "Product deleted successflly";
-
-            return Json(new { success = true, message = "Delete successful." });
-
-
-        }
-
-
-        #endregion
+    #region API CALLS
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+      var categoryList = _unitOfWork.Category.GetAll();
+      return Json(new { data = categoryList });
 
     }
+
+
+    [HttpDelete]
+
+    public IActionResult Delete(int? id)
+    {
+      var obj = _unitOfWork.Category.GetFirstOrDefault(c => c.Id == id);
+
+      if (obj == null)
+      {
+        return Json(new { success = false, message = "Error while deleting." });
+      }
+
+
+
+      _unitOfWork.Category.Remove(obj);
+      _unitOfWork.Save(); TempData["success"] = "Product deleted successflly";
+
+      return Json(new { success = true, message = "Delete successful." });
+
+
+    }
+
+
+    #endregion
+
+  }
 }

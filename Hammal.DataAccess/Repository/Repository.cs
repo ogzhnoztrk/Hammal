@@ -1,5 +1,6 @@
 ﻿using Hammal.DataAccess.Data;
 using Hammal.DataAccess.Repository.IRepository;
+using Hammal.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -67,8 +68,42 @@ namespace Hammal.DataAccess.Repository
 			}
 			return query.FirstOrDefault();
 		}
+    public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = true)
+    {
+      IQueryable<T> query;
+      if (tracked)
+      {
+        query = dbSet;
+      }
+      else
+      {
+        query = dbSet.AsNoTracking();
+      }
 
-		public void Remove(T entity)
+      query = query.Where(filter);
+      if (includeProperties != null)
+      {
+        foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+          query = query.Include(includeProp);
+        }
+      }
+
+      return await query.FirstOrDefaultAsync();
+    }
+
+    public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null)
+    {
+      IQueryable<T> query = _db.Set<T>();
+
+      if (filter != null)
+      {
+        query = query.Where(filter);
+      }
+
+      return await query.FirstOrDefaultAsync();
+    }
+    public void Remove(T entity)
 		{
 			dbSet.Remove(entity);
 		}

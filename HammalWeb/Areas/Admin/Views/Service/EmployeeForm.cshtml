@@ -1,24 +1,20 @@
 ﻿@model SystemUser
 
 <main class="container">
-
   <div class="my-3 p-3 bg-body rounded shadow-sm">
     <h6 class="border-bottom pb-2 mb-0">Suggestions</h6>
 
     <h5>Employee Kayıt Sayfası</h5>
-    <form id="registerForm" class="row"  method="post">
+    <form id="registerForm" class="row" method="post" >
+      <input type="hidden" asp-for="@Model.Id"/>
       <hr />
+
       <div class="form-floating mb-3 col-md-6">
         <select class="form-control" id="categoryDropdown"></select>
       </div>
       <div class="form-floating mb-3 col-md-6">
-        <select class="form-control" id="altCategoryDropdown" ></select>
+        <select class="form-control" id="altCategoryDropdown"></select>
       </div>
-      
-
-
-
-
 
       <div class="form-floating mb-3">
         <input asp-for="@Model.Name" class="form-control" placeholder="Name" area-required="true" />
@@ -30,54 +26,11 @@
         <label asp-for="@Model.Email">Email</label>
         <span asp-validation-for="@Model.Email" class="text-danger"></span>
       </div>
-
-     @* <div class="form-floating mb-3 col-md-6">
-
-        <select asp-for="@Model.City" id="citiesDropdown" asp-items="@Model.AddressVM.CityList" class="form-select">
-          <option disabled selected>--Select City--</option>
-        </select>
-        <span asp-validation-for="@Model.Street" class="text-danger"></span>
-
-
-      </div>
-      <div class="form-floating mb-3 col-md-6">
-
-        <select asp-for="@Model.District" id="districtDropdown" class="form-select">
-          <option disabled selected>--Select District--</option>
-        </select>
-        <span asp-validation-for="@Model.Street" class="text-danger"></span>
-
-      </div>
-      <div class="form-floating mb-3 col-md-6">
-        <input asp-for="@Model.Street" class="form-control" placeholder="State" />
-        <label asp-for="@Model.Street"></label>
-        <span asp-validation-for="@Model.Street" class="text-danger"></span>
-      </div>
-      <div class="form-floating mb-3 col-md-6">
-        <input asp-for="@Model.PhoneNumber" class="form-control" placeholder="Phone Number" />
-        <label asp-for="@Model.PhoneNumber"></label>
-        <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
-      </div>
-
-      <div class="form-floating mb-3 col-md-6">
-        <input asp-for="@Model.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-        <label asp-for="@Model.Password">Password</label>
-        <span asp-validation-for="@Model.Password" class="text-danger"></span>
-      </div>
-      <div class="form-floating mb-3 col-md-6">
-        <input asp-for="@Model.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-        <label asp-for="@Model.ConfirmPassword">Confirm Password</label>
-        <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
-      </div>
-      <div class="form-floating mb-3 py-2">
-        <select asp-for="@Model.Role" asp-items="@Model.@Model.RoleList" asp- class="form-select">
-          <option disabled selected>--Select Role--</option>
-        </select>
-      </div>*@
-      <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+      <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
     </form>
   </div>
 </main>
+
 
 
 
@@ -116,6 +69,10 @@
 
       });
     });
+
+
+
+
 
 
     $(document).ready(function () {
@@ -158,7 +115,42 @@
         // Ajax isteği başarısız olduğunda hata işleme kodu
       }
     });
-       
+
+    $(function () {
+      $('#registerForm').submit(function (e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Get the form data
+        var formData = $(this).serialize();
+
+        // Get the selected dropdown values
+        debugger;
+        var CategoryId = $('#categoryDropdown').val();
+        var AltCategoryId = $('#altCategoryDropdown').val();
+
+        // Add the selected dropdown values to the form data
+        formData += "&CategoryId=" + CategoryId + "&AltCategoryId=" + AltCategoryId;
+
+        // Send the AJAX request
+        $.ajax({
+          url: "@Url.Action("UpsertSystemUser", "Service", new { area = "Admin" })",
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            // Handle the success response
+            // You can perform any necessary actions here, such as displaying a success message or redirecting to another page
+          },
+          error: function (xhr, status, error) {
+            // Handle the error response
+            // You can display an error message or perform any necessary error handling here
+            console.log(error);
+          }
+        });
+      });
+    });
+
+
+
 
 
   </script>
