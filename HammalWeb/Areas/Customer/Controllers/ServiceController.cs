@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 
-namespace HammalWeb.Areas.Admin.Controllers
+namespace HammalWeb.Areas.Customer.Controllers
 {
-    [Area("Admin")]
+    [Area("Customer")]
 
     public class ServiceController : Controller
     {
@@ -18,7 +18,7 @@ namespace HammalWeb.Areas.Admin.Controllers
 
         public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
-          
+
             _unitOfWork = unitOfWork;
             _emailSender = emailSender;
         }
@@ -133,11 +133,45 @@ namespace HammalWeb.Areas.Admin.Controllers
             return View(category);
         }
 
-    
+    //POST
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpsertSystemUser(SystemUser systemUser)
+    {
+      var claimsIdentity = (ClaimsIdentity)User.Identity;
+      var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+      //claim.Value mevcut giriş yapan kullanıcının idsini veriyor
+
+      var existingRecord = _unitOfWork.SystemUser.GetFirstOrDefault(x => x.ApplicationUserId== claim.Value);
+      if (ModelState.IsValid)
+      {
+      
+          if (existingRecord == null)
+          {
+            _unitOfWork.SystemUser.Add(systemUser);
+            TempData["success"] = "Kategori Oluşturuldu";
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+          }
+          else
+          {
+            existingRecord.Id = systemUser.Id;
+            existingRecord.CategoryId = systemUser.CategoryId;
+            existingRecord.AltCategoryId = systemUser.AltCategoryId;
+            _unitOfWork.SystemUser.Update(existingRecord);
+            TempData["success"] = "Kategori Güncellendi";
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+          }
+        
+      }
+      return View("Index");
+    }
 
 
-        #region API CALLS
-        [HttpGet]
+    #region API CALLS
+    [HttpGet]
         public IActionResult GetAll()
         {
             var categoryList = _unitOfWork.Category.GetAll();

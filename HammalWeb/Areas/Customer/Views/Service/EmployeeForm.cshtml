@@ -1,4 +1,4 @@
-﻿@*@model SystemUser
+﻿@model SystemUser
 
 <main class="container">
   <div class="my-3 p-3 bg-body rounded shadow-sm">
@@ -22,7 +22,7 @@
   </div>
 </main>
 
-*@
+
 
 
 
@@ -41,7 +41,7 @@
         $('#altCategoryDropdown').append(id)
 
         $.ajax({
-          url: "@Url.Action("GetAltCategoryById","Category")",
+          url: "@Url.Action("GetAltCategoryById","Category", new { area = "Admin" })",
           type: 'GET',
           data: { id: id },
           success: function (data) {
@@ -69,7 +69,7 @@
     $(document).ready(function () {
       // Ajax isteği gönder
       $.ajax({
-        url: '@Url.Action("GetAllAltCategories","Category")',
+        url: '@Url.Action("GetAllAltCategories","Category", new { area = "Admin" })',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -89,7 +89,7 @@
     });
     // Ajax isteği gönder
     $.ajax({
-      url: '@Url.Action("GetAll","Category")',
+      url: '@Url.Action("GetAll","Category", new { area = "Admin" })',
       type: 'GET',
       dataType: 'json',
       success: function (data) {
@@ -124,7 +124,7 @@
 
         // Send the AJAX request
         $.ajax({
-          url: "@Url.Action("UpsertSystemUser", "Service", new { area = "Admin" })",
+          url: "@Url.Action("UpsertSystemUser", "Service", new { area = "Customer" })",
           type: 'POST',
           data: formData,
           success: function (data) {
