@@ -17,6 +17,6 @@ namespace Hammal.Models
         public int CityId { get; set; }
         [ForeignKey("CityId")]
         [ValidateNever]
-        public City City { get; set; }
+        public virtual City City { get; set; }
     }
 }

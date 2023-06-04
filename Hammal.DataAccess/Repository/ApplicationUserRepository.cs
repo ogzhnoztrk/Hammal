@@ -18,9 +18,9 @@ namespace Hammal.DataAccess.Repository
             _db = db;
         }
 
-        //public void Update(Category obj)
-        //{
-        //    _db.Categories.Update(obj);
-        //}
+        public void Update(ApplicationUser obj)
+        {
+            _db.ApplicationUsers.Update(obj);
+        }
     }
 }

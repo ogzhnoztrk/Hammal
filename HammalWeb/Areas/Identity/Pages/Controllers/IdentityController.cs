@@ -65,9 +65,6 @@ public class IdentityController : Controller
         })
         .ToList();
 
-
-
-
     return Json(districts);
 
   }
