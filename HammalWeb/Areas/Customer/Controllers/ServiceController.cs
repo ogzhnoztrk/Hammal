@@ -9,129 +9,129 @@ using System.Security.Claims;
 
 namespace HammalWeb.Areas.Customer.Controllers
 {
-    [Area("Customer")]
+  [Area("Customer")]
 
-    public class ServiceController : Controller
+  public class ServiceController : Controller
+  {
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IEmailSender _emailSender;
+
+    public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IEmailSender _emailSender;
 
-        public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
+      _unitOfWork = unitOfWork;
+      _emailSender = emailSender;
+    }
+    public IActionResult Index()
+    {
+      return View();
+    }
+
+    //GET
+    public IActionResult Upsert(int? id)
+    {
+
+
+      if (id == 0 || id == null)
+      {
+        return View();
+
+      }
+      else
+      {
+        var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+
+        return View(categoryFromDb);
+      }
+
+
+    }
+
+    //GET
+    public IActionResult CategoryDetail(int? id)
+    {
+
+
+      if (id == 0 || id == null)
+      {
+        return View("CategoryDetail");
+
+      }
+      else
+      {
+        var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
+
+
+        return View("CategoryDetail", altCategoryFromDb);
+      }
+
+
+    }
+
+
+    //GET
+    public IActionResult EmployeeDetailView(int? id)
+    {
+
+
+      if (id == 0 || id == null)
+      {
+        return View("EmployeeForm");
+
+      }
+      else
+      {
+        var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
+
+
+        return View("CategoryDetail", altCategoryFromDb);
+      }
+
+
+    }
+
+
+    //POST
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Upsert(Category category)
+    {
+      var categoriesFromDb = _unitOfWork.Category.GetFirstOrDefault(filter => filter.Name == category.Name);
+      if (ModelState.IsValid)
+      {
+        if (category.Id == 0)
         {
-
-            _unitOfWork = unitOfWork;
-            _emailSender = emailSender;
+          if (categoriesFromDb == null)
+          {
+            _unitOfWork.Category.Add(category);
+            TempData["success"] = "Kategori Oluşturuldu";
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+          }
+          else
+          {
+            TempData["error"] = "Kategori Mevcut";
+            return RedirectToAction("Index");
+          }
         }
-        public IActionResult Index()
+        else
         {
-            return View();
+          if (categoriesFromDb == null)
+          {
+            _unitOfWork.Category.Update(category);
+            TempData["success"] = "Kategori Güncellendi";
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
+          }
+          else
+          {
+            TempData["error"] = "Kategori Mevcut";
+            return RedirectToAction("Index");
+          }
         }
-
-        //GET
-        public IActionResult Upsert(int? id)
-        {
-
-
-            if (id == 0 || id == null)
-            {
-                return View();
-
-            }
-            else
-            {
-                var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
-
-                return View(categoryFromDb);
-            }
-
-
-        }
-
-        //GET
-        public IActionResult CategoryDetail(int? id)
-        {
-
-
-            if (id == 0 || id == null)
-            {
-                return View("CategoryDetail");
-
-            }
-            else
-            {
-                var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
-
-
-                return View("CategoryDetail", altCategoryFromDb);
-            }
-
-
-        }
-
-
-        //GET
-        public IActionResult EmployeeDetailView(int? id)
-        {
-
-
-            if (id == 0 || id == null)
-            {
-                return View("EmployeeForm");
-
-            }
-            else
-            {
-                var altCategoryFromDb = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id).ToList();
-
-
-                return View("CategoryDetail", altCategoryFromDb);
-            }
-
-
-        }
-
-
-        //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Category category)
-        {
-            var categoriesFromDb = _unitOfWork.Category.GetFirstOrDefault(filter => filter.Name == category.Name);
-            if (ModelState.IsValid)
-            {
-                if (category.Id == 0)
-                {
-                    if (categoriesFromDb == null)
-                    {
-                        _unitOfWork.Category.Add(category);
-                        TempData["success"] = "Kategori Oluşturuldu";
-                        _unitOfWork.Save();
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        TempData["error"] = "Kategori Mevcut";
-                        return RedirectToAction("Index");
-                    }
-                }
-                else
-                {
-                    if (categoriesFromDb == null)
-                    {
-                        _unitOfWork.Category.Update(category);
-                        TempData["success"] = "Kategori Güncellendi";
-                        _unitOfWork.Save();
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        TempData["error"] = "Kategori Mevcut";
-                        return RedirectToAction("Index");
-                    }
-                }
-            }
-            return View(category);
-        }
+      }
+      return View(category);
+    }
 
     //POST
     [HttpPost]
@@ -143,30 +143,27 @@ namespace HammalWeb.Areas.Customer.Controllers
 
       //claim.Value mevcut giriş yapan kullanıcının idsini veriyor
 
-      var existingRecord = _unitOfWork.SystemUser.GetFirstOrDefault(x => x.ApplicationUserId== claim.Value);
+      var existingRecord = _unitOfWork.SystemUser.GetFirstOrDefault(x => x.ApplicationUserId == claim.Value);
       if (ModelState.IsValid)
       {
-      
-          if (existingRecord == null)
-          {
-                    systemUser.ApplicationUserId = claim.Value;
 
-            _unitOfWork.SystemUser.Add(systemUser);
-            TempData["success"] = "Kategori Oluşturuldu";
-            _unitOfWork.Save();
-            return RedirectToAction("Index");
-          }
-          else
-          {
-            existingRecord.Id = systemUser.Id;
-            existingRecord.CategoryId = systemUser.CategoryId;
-            existingRecord.AltCategoryId = systemUser.AltCategoryId;
-            _unitOfWork.SystemUser.Update(existingRecord);
-            TempData["success"] = "Kategori Güncellendi";
-            _unitOfWork.Save();
-            return RedirectToAction("Index");
-          }
-        
+        if (existingRecord == null)
+        {
+          systemUser.ApplicationUserId = claim.Value;
+
+          _unitOfWork.SystemUser.Add(systemUser);
+         await _unitOfWork.SaveAsync();
+          return RedirectToAction("Index","Service");
+        }
+        else
+        {
+          existingRecord.CategoryId = systemUser.CategoryId;
+          existingRecord.AltCategoryId = systemUser.AltCategoryId;
+          _unitOfWork.SystemUser.Update(existingRecord);
+        await _unitOfWork.SaveAsync();
+          return RedirectToAction("Index","Service");
+        }
+
       }
       return View("Index");
     }
@@ -174,37 +171,37 @@ namespace HammalWeb.Areas.Customer.Controllers
 
     #region API CALLS
     [HttpGet]
-        public IActionResult GetAll()
-        {
-            var categoryList = _unitOfWork.Category.GetAll();
-            return Json(new { data = categoryList });
-
-        }
-
-
-        [HttpDelete]
-
-        public IActionResult Delete(int? id)
-        {
-            var obj = _unitOfWork.Category.GetFirstOrDefault(c => c.Id == id);
-
-            if (obj == null)
-            {
-                return Json(new { success = false, message = "Error while deleting." });
-            }
-
-
-
-            _unitOfWork.Category.Remove(obj);
-            _unitOfWork.Save(); TempData["success"] = "Product deleted successflly";
-
-            return Json(new { success = true, message = "Delete successful." });
-
-
-        }
-
-
-        #endregion
+    public IActionResult GetAll()
+    {
+      var categoryList = _unitOfWork.Category.GetAll();
+      return Json(new { data = categoryList });
 
     }
+
+
+    [HttpDelete]
+
+    public IActionResult Delete(int? id)
+    {
+      var obj = _unitOfWork.Category.GetFirstOrDefault(c => c.Id == id);
+
+      if (obj == null)
+      {
+        return Json(new { success = false, message = "Error while deleting." });
+      }
+
+
+
+      _unitOfWork.Category.Remove(obj);
+      _unitOfWork.Save(); TempData["success"] = "Product deleted successflly";
+
+      return Json(new { success = true, message = "Delete successful." });
+
+
+    }
+
+
+    #endregion
+
+  }
 }

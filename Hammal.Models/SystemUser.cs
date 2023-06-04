@@ -12,8 +12,7 @@ namespace Hammal.Models
   public class SystemUser
   {
     [Key]
-
-    public int? Id { get; set; } = null;
+    public int? Id { get; set; }
     public int? CategoryId { get; set; }
     public int? AltCategoryId { get; set; }
 
