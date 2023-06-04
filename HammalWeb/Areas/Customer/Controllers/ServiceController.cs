@@ -1,6 +1,7 @@
 ﻿using Hammal.DataAccess.Repository;
 using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
+using Hammal.Models.Dtos;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,11 @@ namespace HammalWeb.Areas.Customer.Controllers
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailSender _emailSender;
     private readonly IRepository<SystemUser> _repo;
+    private readonly IRepository<Address> _adressRepo;
+    private readonly IRepository<City> _cityRepo;
+    private readonly IRepository<District> _districtRepo;
+    private readonly IRepository<Category> _categoryRepo;
+    private readonly IRepository<AltCategory> _altCategoryRepo;
 
     public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
     {
@@ -23,6 +29,11 @@ namespace HammalWeb.Areas.Customer.Controllers
       _unitOfWork = unitOfWork;
       _emailSender = emailSender;
       _repo = UnitOfWork.GetRepository<SystemUser>();
+      _adressRepo = UnitOfWork.GetRepository<Address>();
+      _cityRepo = UnitOfWork.GetRepository<City>();
+      _districtRepo = UnitOfWork.GetRepository<District>();
+      _categoryRepo = UnitOfWork.GetRepository<Category>();
+      _altCategoryRepo = UnitOfWork.GetRepository<AltCategory>();
     }
     public IActionResult Index()
     {
@@ -91,6 +102,30 @@ namespace HammalWeb.Areas.Customer.Controllers
 
 
     }
+
+    public async Task<IActionResult> ServiceClaimView()
+    {
+      var model = new SystemUserDto();
+
+      var systemUser = await _repo.Find(x => x.AltCategoryId == 7).Include(x => x.ApplicationUser).FirstOrDefaultAsync();
+      var address = await _adressRepo.Find(x => x.ApplicationUserId == systemUser.ApplicationUserId).FirstOrDefaultAsync();
+      var district = await _districtRepo.Find(x => x.Id == address.DistrictId).FirstOrDefaultAsync();
+      var cityName=await _cityRepo.Find(x=>x.Id==district.CityId).Select(y=>y.Name).FirstOrDefaultAsync();
+
+      model.Id = systemUser.Id;
+      model.Name = systemUser.ApplicationUser.Name;
+      model.Email=systemUser.ApplicationUser.Email;
+      model.CityName = cityName;
+      model.DistrictName = district.Name;
+      model.AltCategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.AltCategoryId).Select(y => y.Name).FirstOrDefaultAsync();    
+      model.CategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.CategoryId).Select(y => y.Name).FirstOrDefaultAsync();    
+    
+
+      return View("ServiceClaim",model);
+    }
+
+
+
 
 
     //POST
