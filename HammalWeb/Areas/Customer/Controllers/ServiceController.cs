@@ -15,12 +15,14 @@ namespace HammalWeb.Areas.Customer.Controllers
   {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailSender _emailSender;
+    private readonly IRepository<SystemUser> _repo;
 
     public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
     {
 
       _unitOfWork = unitOfWork;
       _emailSender = emailSender;
+      _repo = UnitOfWork.GetRepository<SystemUser>();
     }
     public IActionResult Index()
     {
@@ -143,7 +145,8 @@ namespace HammalWeb.Areas.Customer.Controllers
 
       //claim.Value mevcut giriş yapan kullanıcının idsini veriyor
 
-      var existingRecord = _unitOfWork.SystemUser.GetFirstOrDefault(x => x.ApplicationUserId == claim.Value);
+      // var existingRecord = _unitOfWork.SystemUser.GetFirstOrDefault(x => x.ApplicationUserId == claim.Value);
+      var existingRecord = await _repo.FirstOrDefaultAsync(x => x.ApplicationUserId == claim.Value);
       if (ModelState.IsValid)
       {
 
@@ -152,16 +155,16 @@ namespace HammalWeb.Areas.Customer.Controllers
           systemUser.ApplicationUserId = claim.Value;
 
           _unitOfWork.SystemUser.Add(systemUser);
-         await _unitOfWork.SaveAsync();
-          return RedirectToAction("Index","Service");
+          await _unitOfWork.SaveAsync();
+          return RedirectToAction("Index", "Service");
         }
         else
         {
           existingRecord.CategoryId = systemUser.CategoryId;
           existingRecord.AltCategoryId = systemUser.AltCategoryId;
-          _unitOfWork.SystemUser.Update(existingRecord);
-        await _unitOfWork.SaveAsync();
-          return RedirectToAction("Index","Service");
+          _repo.Update(existingRecord);
+          await _unitOfWork.SaveAsync();
+          return RedirectToAction("Index", "Service");
         }
 
       }

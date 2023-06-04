@@ -92,6 +92,11 @@ namespace Hammal.DataAccess.Repository
       return await query.FirstOrDefaultAsync();
     }
 
+    public virtual Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+    {
+      return _db.Set<T>().FirstOrDefaultAsync(predicate);
+    }
+
     public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> filter = null)
     {
       IQueryable<T> query = _db.Set<T>();
@@ -112,6 +117,31 @@ namespace Hammal.DataAccess.Repository
 		{
 			dbSet.RemoveRange(entity);
 		}
-	}
+
+    public void Update(T entity)
+    {
+			dbSet.AttachRange(entity);
+			_db.Entry(entity).State= EntityState.Modified;
+    }
+    public virtual IQueryable<T> GetAll()
+    {
+      return _db.Set<T>();
+    }
+
+    public virtual IQueryable<T> Find(Expression<Func<T, bool>> predicate)
+    {
+      return _db.Set<T>().Where(predicate);
+    }
+
+
+
+
+
+
+
+
+  }
+
+
 
 }
