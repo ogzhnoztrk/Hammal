@@ -1,5 +1,5 @@
 ﻿@using Hammal.Models.Dtos;
-@model SystemUserDto
+@model List<SystemUserDto>
 
 <!doctype html>
 <html lang="en">
@@ -19,43 +19,58 @@
 <body>
   <main>
     <div class="container-fluid " style="width:90%">
-      <header class="pb-3 mb-4 border-bottom">
-        <h2 class="text-center mt-3">@Model.AltCategoryName</h2>
+     <header class="pb-3 mb-4 border-bottom">
+        <h2 class="text-center mt-3">Apartman Temizliği</h2>
       </header>
 
       <div class="row align-items-md-stretch">
+
         <div class="col-md-2">
           <div class="col-md-12 mb-2">
             <div class="h-100 p-5 text-white bg-dark rounded-3">
-              <h2>Change the background</h2>
-              <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
-              <button class="btn btn-outline-light" type="button">Example button</button>
+              <div class="col-md-12">
+                <span>İl</span>
+                <input type="text" />
+              </div>
+              <div class="col-md-12">
+                <span>İlçe</span>
+                <input type="text" />
+              </div>
+              <div class="col-md-12">
+                <span>Fiyat</span>
+                <input type="number" />
+              </div>
+              <div class="col-md-12 mt-3">
+                <button class="btn btn-outline-dark bg-warning" style="width:100%" type="button">Filtrele</button>
+              </div>
+              
             </div>
           </div>
         </div> 
+
+
         <div class="col-md-10">
           <div class="row align-items-md-stretch">
-          @for (int i = 0; i < 12; i++)
+          @foreach (var item in Model)
           {
             <div class="col-md-4 mb-2">
               <div class="h-100 w-95 p-5 text-white bg-dark rounded-3" style="height:130px">
                   <div class="mb-2" style="display: flex; justify-content: center; align-items: center; ">
-                    <img src="/images/logo.jpg" style="border-radius: 50%; max-width: 40%; max-height: 40%;" />
+                    <img src="/images/temizlik.png" style="border-radius: 80%; max-width: 50%; max-height: 50%;" />
                   </div>
 
-                <h2>@Model.Name</h2>
-                <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
+                <h2>@item.Name</h2>
+                <p>@item.Abilities</p>
                 <div class="row">
                   <div class="col-md-6">
                       <button class="btn btn-outline-light" type="button">Example button</button>
                   </div>
                     <div class="col-md-6">
-                      <h2>4568 TL</h2>
+                      <h2>@item.Price TL</h2>
                     </div>
                 </div>
 
-                
-                
+           
               </div>
             </div>
           }

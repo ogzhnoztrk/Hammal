@@ -103,25 +103,43 @@ namespace HammalWeb.Areas.Customer.Controllers
 
     }
 
-    public async Task<IActionResult> ServiceClaimView()
+    public async Task<IActionResult> ServiceClaimView(int? altCategoryId)
     {
-      var model = new SystemUserDto();
+      var modelList = new List<SystemUserDto>();
+      var systemUserList = new List<SystemUser>();
+      if (altCategoryId == null)
+      {
+         systemUserList = await _repo.GetAll().Include(x => x.ApplicationUser).ToListAsync();
+      }
+      else
+      {
+        systemUserList = await _repo.Find(x => x.AltCategoryId == altCategoryId).Include(x => x.ApplicationUser).ToListAsync();
+      }
 
-      var systemUser = await _repo.Find(x => x.AltCategoryId == 7).Include(x => x.ApplicationUser).FirstOrDefaultAsync();
-      var address = await _adressRepo.Find(x => x.ApplicationUserId == systemUser.ApplicationUserId).FirstOrDefaultAsync();
-      var district = await _districtRepo.Find(x => x.Id == address.DistrictId).FirstOrDefaultAsync();
-      var cityName=await _cityRepo.Find(x=>x.Id==district.CityId).Select(y=>y.Name).FirstOrDefaultAsync();
+      foreach (var systemUser in systemUserList)
+      {
+        var model = new SystemUserDto();
 
-      model.Id = systemUser.Id;
-      model.Name = systemUser.ApplicationUser.Name;
-      model.Email=systemUser.ApplicationUser.Email;
-      model.CityName = cityName;
-      model.DistrictName = district.Name;
-      model.AltCategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.AltCategoryId).Select(y => y.Name).FirstOrDefaultAsync();    
-      model.CategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.CategoryId).Select(y => y.Name).FirstOrDefaultAsync();    
-    
+        var address = await _adressRepo.Find(x => x.ApplicationUserId == systemUser.ApplicationUserId).FirstOrDefaultAsync();
+        var district = await _districtRepo.Find(x => x.Id == address.DistrictId).FirstOrDefaultAsync();
+        var cityName = await _cityRepo.Find(x => x.Id == district.CityId).Select(y => y.Name).FirstOrDefaultAsync();
 
-      return View("ServiceClaim",model);
+
+        model.Id = systemUser.Id;
+        model.Name = systemUser.ApplicationUser.Name;
+        model.Email = systemUser.ApplicationUser.Email;
+        model.Price = systemUser.Price;
+        model.Abilities = systemUser.Abilities;
+        model.CityName = cityName;
+        model.DistrictName = district.Name;
+        model.AltCategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.AltCategoryId).Select(y => y.Name).FirstOrDefaultAsync();
+        model.CategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.CategoryId).Select(y => y.Name).FirstOrDefaultAsync();
+        modelList.Add(model);
+      }
+
+
+
+      return View("ServiceClaim", modelList);
     }
 
 
@@ -197,6 +215,8 @@ namespace HammalWeb.Areas.Customer.Controllers
         {
           existingRecord.CategoryId = systemUser.CategoryId;
           existingRecord.AltCategoryId = systemUser.AltCategoryId;
+          existingRecord.Price = systemUser.Price;
+          existingRecord.Abilities = systemUser.Abilities;
           _repo.Update(existingRecord);
           await _unitOfWork.SaveAsync();
           return RedirectToAction("Index", "Service");

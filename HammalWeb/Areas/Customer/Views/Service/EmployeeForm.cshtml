@@ -15,7 +15,12 @@
       <div class="form-floating mb-3 col-md-6">
         <select class="form-control" id="altCategoryDropdown"></select>
       </div>
-
+      <div class="col-md-6">
+        <input type="number" asp-for="@Model.Price" />
+      </div>
+      <div class="col-md-6">
+        <input type="text" asp-for="@Model.Abilities" />
+      </div>
    
       <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
     </form>
