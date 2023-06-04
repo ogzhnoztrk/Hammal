@@ -1,25 +1,39 @@
 ﻿using Hammal.DataAccess.Repository;
 using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
+using Hammal.Models.Dtos;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 
-namespace HammalWeb.Areas.Admin.Controllers
+namespace HammalWeb.Areas.Customer.Controllers
 {
-  [Area("Admin")]
+  [Area("Customer")]
 
   public class ServiceController : Controller
   {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEmailSender _emailSender;
     private readonly IRepository<SystemUser> _repo;
+    private readonly IRepository<Address> _adressRepo;
+    private readonly IRepository<City> _cityRepo;
+    private readonly IRepository<District> _districtRepo;
+    private readonly IRepository<Category> _categoryRepo;
+    private readonly IRepository<AltCategory> _altCategoryRepo;
+
     public ServiceController(IUnitOfWork unitOfWork, IEmailSender emailSender)
     {
-      _repo = UnitOfWork.GetRepository<SystemUser>();
+
       _unitOfWork = unitOfWork;
       _emailSender = emailSender;
+      _repo = UnitOfWork.GetRepository<SystemUser>();
+      _adressRepo = UnitOfWork.GetRepository<Address>();
+      _cityRepo = UnitOfWork.GetRepository<City>();
+      _districtRepo = UnitOfWork.GetRepository<District>();
+      _categoryRepo = UnitOfWork.GetRepository<Category>();
+      _altCategoryRepo = UnitOfWork.GetRepository<AltCategory>();
     }
     public IActionResult Index()
     {
@@ -89,6 +103,48 @@ namespace HammalWeb.Areas.Admin.Controllers
 
     }
 
+    public async Task<IActionResult> ServiceClaimView(int? altCategoryId)
+    {
+      var modelList = new List<SystemUserDto>();
+      var systemUserList = new List<SystemUser>();
+      if (altCategoryId == null)
+      {
+         systemUserList = await _repo.GetAll().Include(x => x.ApplicationUser).ToListAsync();
+      }
+      else
+      {
+        systemUserList = await _repo.Find(x => x.AltCategoryId == altCategoryId).Include(x => x.ApplicationUser).ToListAsync();
+      }
+
+      foreach (var systemUser in systemUserList)
+      {
+        var model = new SystemUserDto();
+
+        var address = await _adressRepo.Find(x => x.ApplicationUserId == systemUser.ApplicationUserId).FirstOrDefaultAsync();
+        var district = await _districtRepo.Find(x => x.Id == address.DistrictId).FirstOrDefaultAsync();
+        var cityName = await _cityRepo.Find(x => x.Id == district.CityId).Select(y => y.Name).FirstOrDefaultAsync();
+
+
+        model.Id = systemUser.Id;
+        model.Name = systemUser.ApplicationUser.Name;
+        model.Email = systemUser.ApplicationUser.Email;
+        model.Price = systemUser.Price;
+        model.Abilities = systemUser.Abilities;
+        model.CityName = cityName;
+        model.DistrictName = district.Name;
+        model.AltCategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.AltCategoryId).Select(y => y.Name).FirstOrDefaultAsync();
+        model.CategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.CategoryId).Select(y => y.Name).FirstOrDefaultAsync();
+        modelList.Add(model);
+      }
+
+
+
+      return View("ServiceClaim", modelList);
+    }
+
+
+
+
 
     //POST
     [HttpPost]
@@ -137,33 +193,35 @@ namespace HammalWeb.Areas.Admin.Controllers
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpsertSystemUser(SystemUser systemUser)
     {
-      bool newRecord = false;
-      var existingRecord =  _unitOfWork.SystemUser.GetFirstOrDefault(x=>x.Email==systemUser.Email);
+      var claimsIdentity = (ClaimsIdentity)User.Identity;
+      var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+      //claim.Value mevcut giriş yapan kullanıcının idsini veriyor
+
+      // var existingRecord = _unitOfWork.SystemUser.GetFirstOrDefault(x => x.ApplicationUserId == claim.Value);
+      var existingRecord = await _repo.FirstOrDefaultAsync(x => x.ApplicationUserId == claim.Value);
       if (ModelState.IsValid)
       {
-        if (systemUser.Id == Guid.Empty)
+
+        if (existingRecord == null)
         {
-          if (existingRecord == null)
-          {
-            _unitOfWork.SystemUser.Add(systemUser);
-            TempData["success"] = "Kategori Oluşturuldu";
-            _unitOfWork.Save();
-            return RedirectToAction("Index");
-          }
-          else
-          {
-            existingRecord.Id=systemUser.Id;
-            existingRecord.AddressId=systemUser.AddressId;
-            existingRecord.Name=systemUser.Name;
-            existingRecord.Email=systemUser.Email;
-            existingRecord.CategoryId = systemUser.CategoryId;
-            existingRecord.AltCategoryId=systemUser.AltCategoryId;  
-            _unitOfWork.SystemUser.Update(existingRecord);
-            TempData["success"] = "Kategori Güncellendi";
-            _unitOfWork.Save();
-            return RedirectToAction("Index");
-          }
-        }     
+          systemUser.ApplicationUserId = claim.Value;
+
+          _unitOfWork.SystemUser.Add(systemUser);
+          await _unitOfWork.SaveAsync();
+          return RedirectToAction("Index", "Service");
+        }
+        else
+        {
+          existingRecord.CategoryId = systemUser.CategoryId;
+          existingRecord.AltCategoryId = systemUser.AltCategoryId;
+          existingRecord.Price = systemUser.Price;
+          existingRecord.Abilities = systemUser.Abilities;
+          _repo.Update(existingRecord);
+          await _unitOfWork.SaveAsync();
+          return RedirectToAction("Index", "Service");
+        }
+
       }
       return View("Index");
     }
