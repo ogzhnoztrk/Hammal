@@ -12,9 +12,13 @@ namespace Hammal.Models
   public class SystemUser
   {
     [Key]
-    public int Id { get; set; }
-  
-    public string ApplicationUserId { get; set; }
+    public int? Id { get; set; }
+    public int? CategoryId { get; set; }
+    public int? AltCategoryId { get; set; }
+    public string? Abilities { get; set; }
+    public double? Price { get; set; }
+
+    public string? ApplicationUserId { get; set; } = null;
     [ForeignKey("ApplicationUserId")]
     [ValidateNever]
     public ApplicationUser ApplicationUser { get; set; }
