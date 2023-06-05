@@ -29,8 +29,8 @@
               </div>
               <div class="col-md-3">
                 <div class="d-flex justify-content-between">
-                  <a type="button" asp-controller="Service" asp-action="CategoryDetail" asp-route-id="@altCategory.Id" asp-area="Admin" class="btn btn-sm btn-warning ">Teklif Al</a>
-                </div>
+                    <button type="button" onclick="window.location.href='@Url.Action("ServiceClaimView","Service",new {area="Customer",altCategoryId=altCategory.Id})'" class="btn btn-warning btn-lg px-4 me-md-2 fw-bold">Teklif Al</button>
+                  </div>
               </div>
             </div>
           </div>
