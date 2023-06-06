@@ -1,43 +1,34 @@
 ﻿@model List<Category>
 @{
-    ViewData["Title"] = "Home";
-   
+  ViewData["Title"] = "Home";
+
 }
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.88.1">
-    <title>Album example · Bootstrap v5.1</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.88.1">
+  <title>Album example · Bootstrap v5.1</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/album/">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/album/">
 
-    <!-- Bootstrap core CSS -->
-<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-    </style>
-  </head>
-  <body>
-<main>
+</head>
+<body>
+  <main>
 
     <section class="py-7 text-center container">
       <div class="container my-5">
         <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
           <div class="col-lg-6 p-3 p-lg-5 pt-lg-3">
-                    <h1 class="display-4 fw-bold lh-1">Hammal Dünyasının Ayrıcalıklarına Katıl</h1>
-                   <p class="lead">Yeteneğin doğrultusunda ister tekliflere açık ol ister hammal istediğin yere gelsin. Sen işini ona bırak. Ayrıcalıklardan yararlanmak için devam et.</p>
-                  <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4 mb-lg-3">
+            <h1 class="display-4 fw-bold lh-1">Hammal Dünyasının Ayrıcalıklarına Katıl</h1>
+            <p class="lead">Yeteneğin doğrultusunda ister tekliflere açık ol ister hammal istediğin yere gelsin. Sen işini ona bırak. Ayrıcalıklardan yararlanmak için devam et.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4 mb-lg-3">
               <button type="button" onclick="window.location.href='@Url.Action("ServiceClaimView","Service",new {area="Customer"})'" class="btn btn-warning btn-lg px-4 me-md-2 fw-bold">Hammal Evine Gelsin</button>
               <button type="button" onclick="window.location.href='@Url.Action("EmployeeDetailView","Service",new {area="Customer"})'" class="btn btn-outline-warning text-dark btn-lg px-4">Hammal Dünyasına Katıl</button>
             </div>
@@ -48,55 +39,59 @@
         </div>
       </div>
 
-      
+
     </section>
 
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <form>
-  
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
-                @for (int i = 0; i < Model.Count; i++)
-                {
-                  <div class="col">
-                    <div class="card shadow-sm">
-              
-                      <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="@Model[i].CategoryImgPath" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
-                      <h3 class="px-4 me-md-2 fw-bold" style="text-align:center">@Model[i].Name</h3>
-                      <div class="card-body">
-                          <div class="row">
-                          <p class="card-text ">@Model[i].CategoryAciklama</p>
-                          <div class="col-md-6 d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                          <a type="button" asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="btn btn-sm btn-warning ">Teklif Al</a>
-                        
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="row">
-                              <small class="text-muted text-right">1245 profesyonel</small>
-                            </div>
-                            <div class="row">
-                              <small class="text-muted text-right">4.8 (38.060 onaylı yorum)</small>
-                            </div>
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <form>
 
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+              <div class="col">
+                <div class="card shadow-sm">
+                  <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="@Model[i].CategoryImgPath" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                  <title>Placeholder</title>
+                  <rect width="100%" height="100%" fill="#55595c" />
+                  <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text>
+                  <h3 class="px-4 me-md-2 fw-bold text-center">@Model[i].Name</h3>
+                  <div class="card-body">
+                    <div class="row">
+                      <p class="card-text">@Model[i].CategoryAciklama</p>
+                      <div class="col-md-12 d-flex justify-content-center">
+                        <div class="btn-group w-100">
+                       
+                          <div id="wrapper">
+                            <a asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="my-super-cool-btn ml-3">
+                              <span>""</span>
+                            </a>
                           </div>
                         </div>
-                       </div>
+                      </div>
                     </div>
                   </div>
-                }
-            </div>
+                </div>
+
+
+               
+
+
+
+
+              </div>
+            }
+          </div>
         </form>
+      </div>
     </div>
-  </div>
 
-</main>
-
+  </main>
 
 
-    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 
-      
-  </body>
+  <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
 </html>
