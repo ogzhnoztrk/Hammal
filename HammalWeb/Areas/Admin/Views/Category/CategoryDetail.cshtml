@@ -4,7 +4,7 @@
 <main class="container">
 
   <div class="my-3 p-3 bg-body rounded shadow-sm">
-    <h6 class="border-bottom pb-2 mb-0">Suggestions</h6>
+    <h6 class="border-bottom pb-2 mb-0"></h6>
 
     @{
       foreach (var altCategory in Model)
@@ -29,7 +29,13 @@
               </div>
               <div class="col-md-3">
                 <div class="d-flex justify-content-between">
-                    <button type="button" onclick="window.location.href='@Url.Action("ServiceClaimView","Service",new {area="Customer",altCategoryId=altCategory.Id})'" class="btn btn-warning btn-lg px-4 me-md-2 fw-bold">Teklif Al</button>
+                   
+                  <div id="wrapper">
+                    <a class="my-super-cool-btn ml-3" style="max-width:50%" onclick="window.location.href='@Url.Action("ServiceClaimView","Service",new {area="Customer",altCategoryId=altCategory.Id})'">
+                      <span>""</span>
+                    </a>
+                  </div>
+                    
                   </div>
               </div>
             </div>
