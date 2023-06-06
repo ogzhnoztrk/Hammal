@@ -8,14 +8,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.88.1">
-  <title>Album example · Bootstrap v5.1</title>
-
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/album/">
-
-  <!-- Bootstrap core CSS -->
   <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
@@ -61,9 +53,9 @@
                       <p class="card-text">@Model[i].CategoryAciklama</p>
                       <div class="col-md-12 d-flex justify-content-center">
                         <div class="btn-group w-100">
-                       
-                          <div id="wrapper">
-                            <a asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="my-super-cool-btn ml-3">
+                         @* <button asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="btn btn-sm btn-custom btn-lg text-white w-100">Teklif Al</button>
+                     *@     <div id="wrapper">
+                            <a asp-controller ="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="my-super-cool-btn ml-3">
                               <span>""</span>
                             </a>
                           </div>
