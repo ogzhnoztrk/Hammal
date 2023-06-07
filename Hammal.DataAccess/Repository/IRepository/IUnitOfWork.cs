@@ -17,6 +17,7 @@ namespace Hammal.DataAccess.Repository.IRepository
     IAddressRepository Address { get; }
     IUserAbilityRepository UserAbility { get; }
     ISystemUserRepository SystemUser { get; }
+    IOrderRepository Order { get; }
 
     void Save();
     Task<int> SaveAsync();
