@@ -12,7 +12,9 @@ namespace Hammal.Models.Dtos
     public string? Name { get; set; }
     public string? Email { get; set; }
     public string? CityName { get; set; }
+    public int? CityId { get; set; }
     public string? DistrictName { get; set; }
+    public int? DistrictId{ get; set; }
     public string? CategoryName { get; set; }
     public string? AltCategoryName { get; set; }
     public string? Abilities { get; set; }

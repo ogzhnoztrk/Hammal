@@ -103,13 +103,14 @@ namespace HammalWeb.Areas.Customer.Controllers
 
     }
 
-    public async Task<IActionResult> ServiceClaimView(int? altCategoryId)
+    public async Task<IActionResult> ServiceClaimView(int? altCategoryId,int? cityId,int? districtId,double? priceMax,double? priceMin)
     {
       var modelList = new List<SystemUserDto>();
       var systemUserList = new List<SystemUser>();
       if (altCategoryId == null)
       {
-         systemUserList = await _repo.GetAll().Include(x => x.ApplicationUser).ToListAsync();
+        systemUserList = await _repo.GetAll().Include(x => x.ApplicationUser).ToListAsync();
+
       }
       else
       {
@@ -122,7 +123,7 @@ namespace HammalWeb.Areas.Customer.Controllers
 
         var address = await _adressRepo.Find(x => x.ApplicationUserId == systemUser.ApplicationUserId).FirstOrDefaultAsync();
         var district = await _districtRepo.Find(x => x.Id == address.DistrictId).FirstOrDefaultAsync();
-        var cityName = await _cityRepo.Find(x => x.Id == district.CityId).Select(y => y.Name).FirstOrDefaultAsync();
+        var city = await _cityRepo.Find(x => x.Id == district.CityId).FirstOrDefaultAsync();
 
 
         model.Id = systemUser.Id;
@@ -130,19 +131,45 @@ namespace HammalWeb.Areas.Customer.Controllers
         model.Email = systemUser.ApplicationUser.Email;
         model.Price = systemUser.Price;
         model.Abilities = systemUser.Abilities;
-        model.CityName = cityName;
+        model.CityName = city.Name;
+        model.CityId = city.Id;
         model.DistrictName = district.Name;
+        model.DistrictId = district.Id;
         model.AltCategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.AltCategoryId).Select(y => y.Name).FirstOrDefaultAsync();
         model.CategoryName = await _altCategoryRepo.Find(x => x.Id == systemUser.CategoryId).Select(y => y.Name).FirstOrDefaultAsync();
         modelList.Add(model);
       }
 
+      if (cityId!=null)
+      {
+       modelList= modelList.Where(x => x.CityId == cityId).ToList();
+      }
+      else if (districtId!=null)
+      {
+        modelList = modelList.Where(x => x.DistrictId == districtId).ToList();
+      }
+      else if (priceMax != null || priceMin!=null)
+      {
+        modelList= modelList.Where(x=>x.Price<=priceMax && x.Price>=priceMin).ToList();
+      }
 
+      var cities = await _cityRepo.GetAll().ToListAsync(); ;
+      ViewBag.Cities = cities;
+      ViewBag.Districts = "";
+      ViewBag.AltCategoryId = altCategoryId??-1;
 
       return View("ServiceClaim", modelList);
     }
 
+    public async Task<IActionResult> OnChangeCities(int? cityId)
+    {
+      var cities= await _repo.GetAll().ToListAsync();
+      ViewBag.Cities = cities;
+      var districts= await _districtRepo.Find(x=>x.CityId==cityId).ToListAsync();
+      ViewBag.Districts = districts;
+      return Json(new { success = true, districts = districts });
 
+    }
 
 
 
