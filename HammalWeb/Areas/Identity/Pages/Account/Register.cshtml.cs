@@ -118,6 +118,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account
       public string? Street { get; set; }
       public string? District { get; set; }
       public string? PhoneNumber { get; set; }
+      public string? FullAddress { get; set; }
       public string? Role { get; set; }
       public AddressVM AddressVM { get; set; }
       [ValidateNever]
@@ -200,6 +201,7 @@ namespace HammalWeb.Areas.Identity.Pages.Account
           address.Street = Input.Street;
           address.ApplicationUserId = user.Id;
           address.DistrictId = Int32.Parse(Input.District);
+                    address.FullAddress = Input.FullAddress;
 
           _unitOfWork.Address.Add(address);
           _unitOfWork.Save();
