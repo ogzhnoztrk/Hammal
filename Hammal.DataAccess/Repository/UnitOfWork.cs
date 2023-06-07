@@ -27,6 +27,7 @@ namespace Hammal.DataAccess.Repository
       Address = new AddressRepository(_db);
       UserAbility = new UserAbilityRepository(_db);
       SystemUser = new SystemUserRepository(_db);
+      Order = new OrderRepository(_db);
 
     }
     public static IRepository<T> GetRepository<T>() where T : class
@@ -43,6 +44,7 @@ namespace Hammal.DataAccess.Repository
     public IAddressRepository Address { get; set; }
     public IUserAbilityRepository UserAbility { get; set; }
     public ISystemUserRepository SystemUser { get; set; }
+    public IOrderRepository Order{ get; set; }
 
 
     public void Save()
