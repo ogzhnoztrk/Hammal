@@ -26,6 +26,6 @@ namespace Hammal.Models
         public string? SiparisDurum { get; set; }/*Hazırlanıyor, tamamlandı Gibisinden*/
         public string? OdemeDurum { get; set; } /*ödeme sisteminden gelen durum bilgsi*/
 
-        public int OrderTotal { get; set; }
+        public double OrderTotal { get; set; }
     }
 }
