@@ -11,6 +11,13 @@ namespace Hammal.Utilities
         public const string Role_User_Indi = "Individual";
         public const string Role_Admin = "Admin";
         public const string Role_Employee = "Employee";
+        
+        public const string Siparis_Olusturulmadi= "Siparis Olusturulmadi";
+       
+        public const string Odeme_Yapilmadi= "Odeme Yapilmadi";
+       
+
+
 
     }
 }
