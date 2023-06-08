@@ -8,6 +8,7 @@ using Hammal.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Hammal.Utilities;
 using AutoMapper;
+using Stripe;
 
 
 
@@ -26,6 +27,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 var mapperConfig = new MapperConfiguration(mc =>
 {
@@ -55,6 +58,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
 
 app.UseAuthentication();
 
