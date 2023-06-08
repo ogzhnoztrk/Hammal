@@ -23,5 +23,28 @@ namespace Hammal.DataAccess.Repository
         {
             _db.Orders.Update(obj);
         }
-    }
+		public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
+		{
+			var orderFromDb = _db.Orders.FirstOrDefault(x => x.Id == id);
+			if (orderFromDb != null)
+			{
+				orderFromDb.SiparisDurum = orderStatus;
+				if (paymentStatus != null)
+				{
+					orderFromDb.OdemeDurum = paymentStatus;
+				}
+			}
+		}
+
+		public void UpdateStripePaymentID(int id, string sessionId, string paymentItentId)
+		{
+			var orderFromDb = _db.Orders.FirstOrDefault(x => x.Id == id);
+			orderFromDb.PaymentDate = DateTime.Now;
+			orderFromDb.SessionId = sessionId;
+			orderFromDb.PaymentIntentId = paymentItentId;
+
+
+
+		}
+	}
 }
