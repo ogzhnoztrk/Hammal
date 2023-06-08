@@ -28,6 +28,8 @@ namespace Hammal.DataAccess.Repository
       UserAbility = new UserAbilityRepository(_db);
       SystemUser = new SystemUserRepository(_db);
       Order = new OrderRepository(_db);
+      OrderDetail = new OrderDetailRepository(_db);
+      ShoppingCart = new ShoppingCartRepository(_db);
 
     }
     public static IRepository<T> GetRepository<T>() where T : class
@@ -45,6 +47,8 @@ namespace Hammal.DataAccess.Repository
     public IUserAbilityRepository UserAbility { get; set; }
     public ISystemUserRepository SystemUser { get; set; }
     public IOrderRepository Order{ get; set; }
+    public IOrderDetailRepository OrderDetail{ get; set; }
+    public IShoppingCartRepository ShoppingCart{ get; set; }
 
 
     public void Save()

@@ -18,6 +18,8 @@ namespace Hammal.DataAccess.Repository.IRepository
     IUserAbilityRepository UserAbility { get; }
     ISystemUserRepository SystemUser { get; }
     IOrderRepository Order { get; }
+    IOrderDetailRepository  OrderDetail { get; }
+    IShoppingCartRepository ShoppingCart{ get; }
 
     void Save();
     Task<int> SaveAsync();

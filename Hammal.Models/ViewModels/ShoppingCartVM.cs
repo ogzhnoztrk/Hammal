@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Hammal.Models.ViewModels
 {
-    public class OrderVM
-    {
-        public Order? Order { get; set; }
-        public SystemUser? SystemUser { get; set; }
+	public class ShoppingCartVM
+	{
+        public IEnumerable<ShoppingCart> CartList{ get; set; }
+        public Order Order { get; set; }
+
     }
 }
