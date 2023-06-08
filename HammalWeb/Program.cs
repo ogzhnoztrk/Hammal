@@ -29,6 +29,12 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+builder.Services.AddSession(o =>
+{
+	o.IdleTimeout = TimeSpan.FromMinutes(100);
+	o.Cookie.HttpOnly = true;
+	o.Cookie.IsEssential = true;
+});
 
 var mapperConfig = new MapperConfiguration(mc =>
 {
@@ -65,6 +71,8 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseAuthentication();
 
 app.UseAuthorization();
+app.UseSession();
+
 app.MapRazorPages();
 
 app.MapControllerRoute(
