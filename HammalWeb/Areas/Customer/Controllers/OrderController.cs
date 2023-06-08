@@ -11,7 +11,9 @@ namespace HammalWeb.Areas.Customer.Controllers
     [Area("Customer")]
     public class OrderController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+		[BindProperty]
+		public ShoppingCartVM shoppingCartVM { get; set; }
+		private readonly IUnitOfWork _unitOfWork;
         public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -21,32 +23,60 @@ namespace HammalWeb.Areas.Customer.Controllers
             return View();
         }
 
-        public IActionResult OrderCard(Order order)
+        //HTTPGET
+        public IActionResult OrderCard()
         {
+			var claimsIdentity = (ClaimsIdentity)User.Identity;
+			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            OrderVM orderVM = new OrderVM();
-            orderVM.Order = order;
-            var existingRecord = _unitOfWork.Order.Find(x=>x.Id == order.Id).FirstOrDefault();
-            var SystemUser = _unitOfWork.SystemUser.Find(i=>i.Id == order.SystemUserId).Include(i=>i.AltCategory).ThenInclude(i=>i.Category).FirstOrDefault();
-            if (existingRecord == null)
+            shoppingCartVM = new()
             {
-                orderVM.SystemUser = SystemUser;
-                _unitOfWork.Order.Add(order);
-
+                CartList = _unitOfWork.ShoppingCart.Find(i=>i.ApplicationUserId == claim.Value).AsQueryable().Include(i=>i.SystemUser).ThenInclude(i=>i.AltCategory),
+                Order = new()
+            };
+			shoppingCartVM.Order.Address = _unitOfWork.Address.Find(x => x.ApplicationUserId == claim.Value).AsQueryable().Include(i => i.District).ThenInclude(i => i.City).FirstOrDefault();
+			foreach (var item in shoppingCartVM.CartList)
+            {
+                shoppingCartVM.Order.OrderTotal = shoppingCartVM.Order.OrderTotal + (double)item.SystemUser.Price; 
             }
-            
-            
-            _unitOfWork.Save();
-
-            return View(orderVM);
+			return View(shoppingCartVM);
 
         }
 
-        public IActionResult Remove(int cartId)
+        public IActionResult Summary()
+        {
+			var claimsIdentity = (ClaimsIdentity)User.Identity;
+			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+			shoppingCartVM = new ShoppingCartVM()
+			{
+				CartList = _unitOfWork.ShoppingCart.GetAll(i => i.ApplicationUserId == claim.Value,includeProperties:"SystemUser,ApplicationUser"),
+				Order = new()
+			};
+
+			shoppingCartVM.Order.ApplicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(
+				u => u.Id == claim.Value);
+            shoppingCartVM.Order.CustomerId = claim.Value;
+            shoppingCartVM.Order.Address = _unitOfWork.Address.Find(x => x.ApplicationUserId == claim.Value).AsQueryable().Include(i=>i.District).ThenInclude(i=>i.City).FirstOrDefault();
+            shoppingCartVM.Order.CustomerAddressId = shoppingCartVM.Order.Address.Id;
+
+            shoppingCartVM.Order.OdemeDurum = SD.Odeme_Yapilmadi;
+            shoppingCartVM.Order.SiparisDurum = SD.Siparis_Olusturulmadi;
+
+
+			foreach (var cart in shoppingCartVM.CartList)
+			{
+				shoppingCartVM.Order.OrderTotal = shoppingCartVM.Order.OrderTotal + (double)cart.SystemUser.Price;
+			}
+			return View(shoppingCartVM);
+			
+        }
+
+		public IActionResult Remove(int cartId)
         {
 
-            var cart = _unitOfWork.Order.GetFirstOrDefault(u => u.Id == cartId);
-            _unitOfWork.Order.Remove(cart);
+            var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);
+            _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
 
 

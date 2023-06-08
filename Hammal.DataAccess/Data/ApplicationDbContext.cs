@@ -23,6 +23,8 @@ namespace Hammal.DataAccess.Data
         public DbSet<UserAbility> UserAbilities{ get; set; }
         public DbSet<SystemUser> SystemUsers{ get; set; }
         public DbSet<Order> Orders{ get; set; }
+        public DbSet<OrderDetail> OrderDetails{ get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts{ get; set; }
         
     }
 }

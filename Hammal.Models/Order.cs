@@ -17,15 +17,17 @@ namespace Hammal.Models
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
 
-        public int SystemUserId { get; set; }
-        [ForeignKey("SystemUserId")]
-        [ValidateNever]
-        public SystemUser SystemUser { get; set; }
+       
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
         public string? SiparisDurum { get; set; }/*Hazırlanıyor, tamamlandı Gibisinden*/
         public string? OdemeDurum { get; set; } /*ödeme sisteminden gelen durum bilgsi*/
 
         public double OrderTotal { get; set; }
+
+        public int CustomerAddressId { get; set; }
+		[ForeignKey("CustomerAddressId")]
+		[ValidateNever]
+		public Address Address { get; set; }
     }
 }
