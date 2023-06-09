@@ -1,0 +1,37 @@
+﻿@model List<Order>
+@{
+   int i = 1;
+}
+
+<table class="table table-striped table-bordered table-hover mt-3">
+  <thead>
+    <tr>
+      <th>Sıra</th>
+      <th>Müşteri Id</th>
+      <th>Sipariş Tarihi</th>
+      <th>Sipariş Durum</th>
+      <th>Ödeme Durum</th>
+      <th>Sipariş Tutar</th>
+      <th>Onayla</th>
+      <th>Reddet</th>
+    </tr>
+  </thead>
+@foreach(var item in Model){
+
+    <tbody>
+      <tr>
+        <td>@i</td>
+        <td>@item.CustomerId</td>
+        <td>@item.OrderDate</td>
+        <td>@item.SiparisDurum</td>
+        <td>@item.OdemeDurum</td>
+        <td>@item.OrderTotal</td>
+        <td><button class="btn btn-success">Onayla</button></td>
+        <td><button class="btn btn-danger">Reddet</button></td>
+      
+      </tr>
+      
+    </tbody>
+      i++;
+}
+</table>

@@ -28,9 +28,9 @@
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="#" class="nav-link px-2 text-secondary"></a></li>
-          <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+          <li><a href="@Url.Action("Index","Home")" class="nav-link px-2 text-white">Anasayfa</a></li>
           <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+          <li><a href="@Url.Action("GetOrderList","Order",new {area="Customer"})" class="nav-link px-2 text-white">Orders</a></li>
           <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
           <li><a href="#" class="nav-link px-2 text-white">About</a></li>
           <li><a asp-area="Customer" asp-controller="Order" asp-action="OrderCard" class="nav-link px-2 text-white"><i class="fa-solid fa-cart-shopping"></i></a></li>
@@ -55,16 +55,13 @@
         
       <partial name="_Notification" />
       @RenderBody()
-      </>
+      <partial name="_Footer">
+      </partial>
       </div>
     </main>
  
 
-  <footer class="border-top footer text-muted">
-    <div class="container">
-      &copy; 2023 - HammalWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-  </footer>
+
   <script src="~/lib/jquery/dist/jquery.min.js"></script>
   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="~/js/site.js" asp-append-version="true"></script>

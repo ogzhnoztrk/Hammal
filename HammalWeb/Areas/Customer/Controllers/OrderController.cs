@@ -1,4 +1,5 @@
-﻿using Hammal.DataAccess.Repository.IRepository;
+﻿using Hammal.DataAccess.Repository;
+using Hammal.DataAccess.Repository.IRepository;
 using Hammal.Models;
 using Hammal.Models.ViewModels;
 using Hammal.Utilities;
@@ -17,10 +18,14 @@ namespace HammalWeb.Areas.Customer.Controllers
 		[BindProperty]
 		public ShoppingCartVM shoppingCartVM { get; set; }
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly IRepository<Order> _orderRepo;
+
         public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-        }
+						_orderRepo = UnitOfWork.GetRepository<Order>();
+
+    }
         public IActionResult Index()
         {
             return View();
@@ -207,9 +212,19 @@ namespace HammalWeb.Areas.Customer.Controllers
 
 		}
 
+    public async Task<IActionResult> GetOrderList(int? applicationUserId)
+    {
+     
+			var aa = await _orderRepo.GetAll().ToListAsync();
+
+    
+      return View("OrderList",aa);
+
+    }
 
 
-		public IActionResult Remove(int cartId)
+
+    public IActionResult Remove(int cartId)
         {
 
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);

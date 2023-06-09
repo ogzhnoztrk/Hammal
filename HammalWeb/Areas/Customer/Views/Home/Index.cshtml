@@ -54,10 +54,10 @@
                       <div class="col-md-12 d-flex justify-content-center">
                         <div class="btn-group w-100">
                          @* <button asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="btn btn-sm btn-custom btn-lg text-white w-100">Teklif Al</button>
-                     *@     <div id="wrapper">
-                            <a asp-controller ="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="my-super-cool-btn ml-3">
-                              <span>""</span>
-                            </a>
+                     *@     <div class="col-md-12">
+                            <button class="btn btn-warning" asp-controller ="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Customer" >
+                              <span>Teklif Al</span>
+                            </button>
                           </div>
                         </div>
                       </div>
