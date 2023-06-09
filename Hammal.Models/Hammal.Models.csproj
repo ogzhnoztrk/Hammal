@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.4" />
+    <PackageReference Include="Stripe.net" Version="41.19.0" />
   </ItemGroup>
 
 </Project>
