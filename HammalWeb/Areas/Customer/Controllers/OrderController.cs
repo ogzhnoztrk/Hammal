@@ -5,6 +5,7 @@ using Hammal.Utilities;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
@@ -38,7 +39,9 @@ namespace HammalWeb.Areas.Customer.Controllers
                 Order = new()
             };
 			shoppingCartVM.Order.Address = _unitOfWork.Address.Find(x => x.ApplicationUserId == claim.Value).AsQueryable().Include(i => i.District).ThenInclude(i => i.City).FirstOrDefault();
-			foreach (var item in shoppingCartVM.CartList)
+			shoppingCartVM.Order.CustomerAddressId = shoppingCartVM.Order.Address.Id;
+
+            foreach (var item in shoppingCartVM.CartList)
             {
                 shoppingCartVM.Order.OrderTotal = shoppingCartVM.Order.OrderTotal + (double)item.SystemUser.Price; 
             }
@@ -57,6 +60,9 @@ namespace HammalWeb.Areas.Customer.Controllers
 				Order = new()
 			};
 
+
+
+		
 			shoppingCartVM.Order.ApplicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(
 				u => u.Id == claim.Value);
             shoppingCartVM.Order.CustomerId = claim.Value;
@@ -76,19 +82,23 @@ namespace HammalWeb.Areas.Customer.Controllers
 			
         }
 
-
-		[HttpPost]
+        [HttpPost]
 		[ActionName("Summary")]
 		[ValidateAntiForgeryToken]
 		public IActionResult SummaryPOST()
         {
-			var claimsIdentity = (ClaimsIdentity)User.Identity;
+            shoppingCartVM.Order.ApplicationUser = null;
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
 			shoppingCartVM.CartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == claim.Value, includeProperties: "SystemUser");
+			
 
-			shoppingCartVM.Order.OrderDate = System.DateTime.Now;
+            shoppingCartVM.Order.OrderDate = System.DateTime.Now;
 			shoppingCartVM.Order.CustomerId = claim.Value;
+
+
 
 			foreach (var cart in shoppingCartVM.CartList)
 			{
@@ -96,7 +106,7 @@ namespace HammalWeb.Areas.Customer.Controllers
 				shoppingCartVM.Order.OrderTotal = shoppingCartVM.Order.OrderTotal + (double)cart.SystemUser.Price;
 
 			}
-			ApplicationUser applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(u => u.Id == claim.Value);
+			//ApplicationUser applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(u => u.Id == claim.Value);
 
 			//if (applicationUser.CompanyId.GetValueOrDefault() == 0)
 			//{
@@ -184,7 +194,7 @@ namespace HammalWeb.Areas.Customer.Controllers
 		{
 			Order order= _unitOfWork.Order.GetFirstOrDefault(x => x.Id == id, includeProperties: "ApplicationUser");
 
-			if (order.OdemeDurum != SD.Odeme_PaymentStatusDelayedPayment)
+			if (order.OdemeDurum == SD.Odeme_PaymentStatusDelayedPayment)
 			{
 				var service = new SessionService();
 				Session session = service.Get(order.SessionId);
@@ -199,8 +209,14 @@ namespace HammalWeb.Areas.Customer.Controllers
 
 			//_emailSender.SendEmailAsync(order.ApplicationUser.Email, "New Order- Bulky Book", "<p>New Order Created</p>");
 			List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == order.CustomerId).ToList();
-			_unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
-			_unitOfWork.Save();
+
+			foreach (var cart in shoppingCarts)
+			{
+				_unitOfWork.ShoppingCart.Remove(cart);
+                _unitOfWork.Save();
+            }
+			
+			
 
 
 			return View(id);
