@@ -2,9 +2,8 @@
 
 <main class="container">
   <div class="my-3 p-3 bg-body rounded shadow-sm">
-    <h6 class="border-bottom pb-2 mb-0">Suggestions</h6>
-
-    <h5>Employee Kayıt Sayfası</h5>
+   
+    <h5><b>İşçi Kayıt Sayfası</b></h5>
     <form id="registerForm" class="row" method="post" >
       <input type="hidden" asp-for="@Model.Id"/>
       <hr />
@@ -50,7 +49,7 @@
         $('#altCategoryDropdown').append(id)
 
         $.ajax({
-          url: "@Url.Action("GetAltCategoryById","Category", new { area = "Admin" })",
+          url: "@Url.Action("GetAltCategoryById","Category", new { area = "Customer" })",
           type: 'GET',
           data: { id: id },
           success: function (data) {
@@ -78,7 +77,7 @@
     $(document).ready(function () {
       // Ajax isteği gönder
       $.ajax({
-        url: '@Url.Action("GetAllAltCategories","Category", new { area = "Admin" })',
+        url: '@Url.Action("GetAllAltCategories","Category", new { area = "Customer" })',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
@@ -98,7 +97,7 @@
     });
     // Ajax isteği gönder
     $.ajax({
-      url: '@Url.Action("GetAll","Category", new { area = "Admin" })',
+      url: '@Url.Action("GetAll","Category", new { area = "Customer" })',
       type: 'GET',
       dataType: 'json',
       success: function (data) {

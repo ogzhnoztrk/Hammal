@@ -27,8 +27,11 @@
         <td>@item.OdemeDurum</td>
         <td>@item.OrderTotal</td>
         <td><button class="btn btn-success">Onayla</button></td>
-        <td><button class="btn btn-danger">Reddet</button></td>
-      
+        <form asp-controller="Order" asp-action="OrderDenied" method="post">
+          <input type="hidden" name="id" value="@item.Id" />
+        <td><button class="btn btn-danger" type="submit">Reddet</button></td>
+        </form>
+
       </tr>
       
     </tbody>

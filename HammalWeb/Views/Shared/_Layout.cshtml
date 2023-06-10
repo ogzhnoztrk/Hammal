@@ -28,7 +28,7 @@
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="#" class="nav-link px-2 text-secondary"></a></li>
-          <li><a href="@Url.Action("Index","Home")" class="nav-link px-2 text-white">Anasayfa</a></li>
+          <li><a href="@Url.Action("Index","Home")" class="nav-link px-2 text-warning">Anasayfa</a></li>
           <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
           <li><a href="@Url.Action("GetOrderList","Order",new {area="Customer"})" class="nav-link px-2 text-white">Orders</a></li>
           <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
@@ -50,16 +50,31 @@
   </header>
  
     <main role="main" class="mb-2">
-    <div class="">
-      
+    
         
       <partial name="_Notification" />
+
       @RenderBody()
-      <partial name="_Footer">
-      </partial>
+      <div>
+        <br />
       </div>
+    <footer class="album py-2 bg-dark mt-5">
+      <div>
+
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+          <li><a href="@Url.Action("Index","Home")" class="nav-link px-2 text-warning">Anasayfa</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-light">Features</a></li>
+          <li><a href="@Url.Action("GetOrderList","Order",new {area="Customer"})" class="nav-link px-2 text-white">Orders</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-light">FAQs</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-light">About</a></li>
+        </ul>
+        <p class="text-center text-light">&copy; 2023 Sigma Software , Inc</p>
+
+    </footer>
+
+  
     </main>
- 
+
 
 
   <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -74,4 +89,5 @@
 
   @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

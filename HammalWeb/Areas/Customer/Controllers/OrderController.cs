@@ -212,6 +212,36 @@ namespace HammalWeb.Areas.Customer.Controllers
 
 		}
 
+    public async Task<IActionResult> OrderDenied(int id)
+    {
+      Order order = await _orderRepo.GetAll().Include(x => x.ApplicationUser).FirstOrDefaultAsync(x => x.Id == id);
+
+
+      if (order.OdemeDurum == SD.Odeme_PaymentStatusDelayedPayment)
+      {
+        var service = new SessionService();
+        Session session = await service.GetAsync(order.SessionId);
+        //check the stripe status
+        if (session.PaymentStatus.ToLower() == "paid")
+        {
+          _unitOfWork.Order.UpdateStripePaymentID(id, order.SessionId, session.PaymentIntentId);
+          _unitOfWork.Order.UpdateStatus(id, SD.Siparis_StatusCancelled, SD.Odeme_PaymentStatusRejected); ;
+          _unitOfWork.Save();
+        }
+      }
+
+      //_emailSender.SendEmailAsync(order.ApplicationUser.Email, "New Order- Bulky Book", "<p>New Order Created</p>");
+      //List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == order.CustomerId).ToList();
+      //_unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+      //_unitOfWork.Save();
+
+
+      return View(id);
+
+    }
+
+
+
     public async Task<IActionResult> GetOrderList(int? applicationUserId)
     {
      
