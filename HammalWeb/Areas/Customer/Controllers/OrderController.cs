@@ -25,7 +25,7 @@ namespace HammalWeb.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
 						_orderRepo = UnitOfWork.GetRepository<Order>();
 
-    }
+        }
         public IActionResult Index()
         {
             return View();
@@ -76,7 +76,7 @@ namespace HammalWeb.Areas.Customer.Controllers
 			{
 				shoppingCartVM.Order.OrderTotal = shoppingCartVM.Order.OrderTotal + (double)cart.SystemUser.Price;
 
-            }
+			}
 			return View(shoppingCartVM);
 			
         }
@@ -200,7 +200,7 @@ namespace HammalWeb.Areas.Customer.Controllers
 					_unitOfWork.Order.UpdateStatus(id, SD.Siparis_StatusApproved, SD.Odeme_PaymentStatusApproved); ;
 					_unitOfWork.Save();
 				}
-			}
+        }
 
 			//_emailSender.SendEmailAsync(order.ApplicationUser.Email, "New Order- Bulky Book", "<p>New Order Created</p>");
 			List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == order.CustomerId).ToList();
@@ -254,7 +254,7 @@ namespace HammalWeb.Areas.Customer.Controllers
 
 
 
-    public IActionResult Remove(int cartId)
+		public IActionResult Remove(int cartId)
         {
 
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.Id == cartId);

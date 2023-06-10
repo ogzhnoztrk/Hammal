@@ -190,9 +190,6 @@ namespace Hammal.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CustomerAddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(450)");
 
@@ -204,18 +201,6 @@ namespace Hammal.DataAccess.Migrations
 
                     b.Property<double>("OrderTotal")
                         .HasColumnType("float");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("PaymentDueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentIntentId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SessionId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SiparisDurum")
                         .HasColumnType("nvarchar(max)");
