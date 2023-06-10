@@ -9,25 +9,33 @@ using System.Threading.Tasks;
 
 namespace Hammal.Models
 {
-    public class Order
-    {
-        public int Id { get; set; }
-        public string? CustomerId { get; set; }
-        [ForeignKey("CustomerId")]
-        [ValidateNever]
-        public ApplicationUser ApplicationUser { get; set; }
+  public class Order
+  {
+    public int Id { get; set; }
+    public string? CustomerId { get; set; }
+    [ForeignKey("CustomerId")]
+    [ValidateNever]
+    public ApplicationUser ApplicationUser { get; set; }
 
-       
-        public DateTime OrderDate { get; set; } = DateTime.Now;
+    public int CustomerAddressId { get; set; }
+    //[ForeignKey("CustomerAddressId")]
+    //[ValidateNever]
+    [NotMapped]
+    public Address Address { get; set; }
 
-        public string? SiparisDurum { get; set; }/*Hazırlanıyor, tamamlandı Gibisinden*/
-        public string? OdemeDurum { get; set; } /*ödeme sisteminden gelen durum bilgsi*/
+    public DateTime OrderDate { get; set; } = DateTime.Now;
 
-        public double OrderTotal { get; set; }
+    public string? SiparisDurum { get; set; }/*Hazırlanıyor, tamamlandı Gibisinden*/
+    public string? OdemeDurum { get; set; } /*ödeme sisteminden gelen durum bilgsi*/
 
-        public int CustomerAddressId { get; set; }
-		[ForeignKey("CustomerAddressId")]
-		[ValidateNever]
-		public Address Address { get; set; }
-    }
+    public DateTime PaymentDate { get; set; }/* ödeme tarihi*/
+    public DateTime PaymentDueDate { get; set; } /*Son Ödeme Tarihi*/
+
+    public string? SessionId { get; set; } /*Ödeme sistemindeki Oturumun IDsi*/
+    public string? PaymentIntentId { get; set; }
+
+    public double OrderTotal { get; set; }
+
+
+  }
 }

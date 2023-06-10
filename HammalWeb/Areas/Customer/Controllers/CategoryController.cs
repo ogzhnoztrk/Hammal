@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using NuGet.Protocol.Plugins;
 
-namespace HammalWeb.Areas.Admin.Controllers
+namespace HammalWeb.Areas.Customer.Controllers
 {
-  [Area("Admin")]
+  [Area("Customer")]
   public class CategoryController : Controller
   {
     private readonly IUnitOfWork _unitOfWork;
@@ -64,6 +64,21 @@ namespace HammalWeb.Areas.Admin.Controllers
 
     }
 
+    [HttpGet]
+    public JsonResult GetAllAltCategories()
+    {
+      var altCategoryList = _unitOfWork.AltCategory.GetAll();
+      return Json(new { data = altCategoryList });
+
+    }
+    [HttpGet]
+    public JsonResult GetAltCategoryById(int id)
+    {
+      var altCategoryList = _unitOfWork.AltCategory.GetAll().Where(x => x.CategoryId == id);
+      return Json(new { data = altCategoryList });
+
+    }
+
     //POST
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -116,20 +131,7 @@ namespace HammalWeb.Areas.Admin.Controllers
       return Json(new { data = categoryList });
 
     }
-    [HttpGet]
-    public JsonResult GetAllAltCategories()
-    {
-      var altCategoryList = _unitOfWork.AltCategory.GetAll();
-      return Json(new { data = altCategoryList });
-
-    }
-    [HttpGet]
-    public JsonResult GetAltCategoryById(int id)
-    {
-      var altCategoryList = _unitOfWork.AltCategory.GetAll().Where(x=>x.CategoryId==id);
-      return Json(new { data = altCategoryList });
-
-    }
+  
 
     [HttpDelete]
 

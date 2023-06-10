@@ -3,16 +3,8 @@
   ViewData["Title"] = "Home";
 
 }
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
-</head>
-<body>
-  <main>
+
 
     <section class="py-7 text-center container">
       <div class="container my-5">
@@ -31,10 +23,9 @@
         </div>
       </div>
 
-
     </section>
 
-    <div class="album py-5 bg-light">
+    <div class="album py-5 bg-light mb-3">
       <div class="container">
         <form>
 
@@ -54,36 +45,28 @@
                       <div class="col-md-12 d-flex justify-content-center">
                         <div class="btn-group w-100">
                          @* <button asp-controller="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="btn btn-sm btn-custom btn-lg text-white w-100">Teklif Al</button>
-                     *@     <div id="wrapper">
-                            <a asp-controller ="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Admin" class="my-super-cool-btn ml-3">
-                              <span>""</span>
-                            </a>
+                     *@     <div class="col-md-12">
+                            <button class="btn btn-warning" asp-controller ="Category" asp-action="CategoryDetail" asp-route-id="@Model[i].Id" asp-area="Customer" >
+
+                          <span style="color:white;">Teklif Al</span> 
+                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-
-               
-
-
-
-
               </div>
             }
           </div>
         </form>
       </div>
+      
     </div>
 
-  </main>
 
 
 
   <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 
 
-</body>
-</html>

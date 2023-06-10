@@ -118,7 +118,7 @@ namespace HammalWeb.Areas.Customer.Controllers
 			else
 			{
 				systemUserList = await _repo.Find(x => x.AltCategoryId == altCategoryId).Include(x => x.ApplicationUser).ToListAsync();
-			}
+			}	
 
 			foreach (var systemUser in systemUserList)
 			{
